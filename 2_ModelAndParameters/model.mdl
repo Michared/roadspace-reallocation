@@ -1,0 +1,3129 @@
+{UTF-8}
+mid distance car share=
+	car users car share on mid distance trips*fraction of city population with car access\
+		/(fraction of city population with car access+
+	fraction of city population with bike access+fraction of city population with only PT access on mid distance trips\
+		)
+	~	Dmnl
+	~		|
+
+mid distance PT share=
+	(bike users PT share on mid distance trips*fraction of city population with bike access\
+		+car users PT share on mid distance trips
+	*fraction of city population with car access
+	+fraction of city population with only PT access on mid distance trips)/(fraction of city population with car access\
+		+fraction of city population with bike access
+	+fraction of city population with only PT access on mid distance trips)
+	~	Dmnl
+	~		|
+
+fraction of city population with bike access=
+	fraction of population with bike access in each zone[city]
+	~	Dmnl
+	~		|
+
+fraction of city population with only PT access on mid distance trips=
+	1-MAX(fraction of city population with car access,fraction of city population with bike access\
+		)
+	~	Dmnl
+	~		|
+
+mid distance bike share=
+	bike users bike share on mid distance trips*fraction of city population with bike access\
+		/(fraction of city population with car access
+	+fraction of city population with bike access+fraction of city population with only PT access on mid distance trips\
+		)
+	~	Dmnl
+	~		|
+
+normalized fraction of city population with bike access=
+	fraction of city population with bike access/REFERENCE FRACTION OF URBAN POPULATION WITH BIKE ACCESS
+	~	Dmnl
+	~		|
+
+fraction of ring population with bike access=
+	fraction of population with bike access in each zone[ring]
+	~	Dmnl
+	~		|
+
+daily mid distance trips[trip distance band]=
+	UNIT VECTOR MID DISTANCE[trip distance band]*daily trips in each trip distance band[\
+		trip distance band]
+	~	trips/Day
+	~		|
+
+physical travel time by bike[trip distance band]=
+	(AVERAGE EUCLIDIAN DISTANCE[trip distance band]*cycling network to euclidian distance ratio\
+		/average cycling speed*
+	MINUTES PER HOUR+CYCLING PARKING TIME)*UNIT VECTOR MID DISTANCE[trip distance band]
+	~	Minutes/trips
+	~		|
+
+subjective travel time by PT[trip distance band]=
+	(in vehicle time by PT[trip distance band]+subjective PT access egress time*UNIT VECTOR MID AND LONG DISTANCE\
+		[trip distance band]+SUBJECTIVE WAITING AND CHANGING TIME[trip distance band
+	])*overcrowding multiplier
+	~	Minutes/trips
+	~		|
+
+variation in subjective travel time by car=
+	(AVERAGE EUCLIDIAN DISTANCE[mid]*Smoothed subjective travel time by car[mid]/INITIAL SUBJECTIVE TRAVEL TIME BY CAR\
+		[mid]+AVERAGE EUCLIDIAN DISTANCE
+	[long]*Smoothed subjective travel time by car
+	[long]/INITIAL SUBJECTIVE TRAVEL TIME BY CAR[long])/(AVERAGE EUCLIDIAN DISTANCE[mid]\
+		+AVERAGE EUCLIDIAN DISTANCE[long])-1
+	~	Dmnl
+	~		|
+
+variation in subjective travel time by PT=
+	(AVERAGE EUCLIDIAN DISTANCE[mid]*Smoothed subjective travel time by PT[mid]/INITIAL SUBJECTIVE TRAVEL TIME BY PT\
+		[mid]+AVERAGE EUCLIDIAN DISTANCE
+	[long]*Smoothed subjective travel time by PT
+	[long]/INITIAL SUBJECTIVE TRAVEL TIME BY PT[long])/(AVERAGE EUCLIDIAN DISTANCE[mid]+\
+		AVERAGE EUCLIDIAN DISTANCE[long])-1
+	~	Dmnl
+	~		|
+
+physical travel time by foot=
+	AVERAGE EUCLIDIAN DISTANCE[short]/WALKING SPEED*MINUTES PER HOUR
+	~	Minutes/trips
+	~		|
+
+PT trips share=
+	(daily mid distance PT trips+daily long distance PT trips)/total daily trips
+	~	Dmnl
+	~		|
+
+daily walking distance=
+	AVERAGE EUCLIDIAN DISTANCE[short]*Daily trips per city population within city[short]\
+		*SUM(Population[city,car adoption status
+	!])
+	~	km/Day
+	~		|
+
+bike trips share=
+	daily mid distance cycling trips/total daily trips
+	~	Dmnl
+	~		|
+
+daily cycling distance=
+	AVERAGE EUCLIDIAN DISTANCE[mid]*daily mid distance cycling trips
+	~	km/Day
+	~		|
+
+daily PT distance=
+	daily mid distance PT trips*AVERAGE EUCLIDIAN DISTANCE[mid]+daily long distance PT trips\
+		*AVERAGE EUCLIDIAN DISTANCE[long
+	]
+	~	km/Day
+	~		|
+
+daily car distance=
+	AVERAGE EUCLIDIAN DISTANCE[long]*daily long distance car trips+AVERAGE EUCLIDIAN DISTANCE\
+		[mid]*daily mid distance car trips
+	~	km/Day
+	~		|
+
+variation in subjective travel time by bike=
+	Smoothed subjective travel time by bike[mid]/INITIAL SUBJECTIVE TRAVEL TIME BY BIKE[\
+		mid]-1
+	~	Dmnl
+	~		|
+
+variation in pedestrian space=
+	Public space[pedestrians]/INITIAL PUBLIC SPACE[pedestrians]-1
+	~	Dmnl
+	~		|
+
+bike users PT share on mid distance trips=
+	EXP(-beta 5*Smoothed subjective travel time by PT[mid]*TRIP PER MINUTE)/(EXP(-beta 5\
+		*Smoothed subjective travel time by PT[mid]*TRIP PER MINUTE)+EXP(-beta 5
+	*Smoothed subjective travel time by bike[mid]*TRIP PER MINUTE))
+	~	Dmnl
+	~		|
+
+change in adults with cars[zone]=
+	(Population[zone, adult car] - previous adults with cars[zone])/YEAR
+	~	persons/Year
+	~		|
+
+bike network completion=
+	separated bike lanes per road/NUMBER OF LANES PER ROAD FOR BIKE NETWORK COMPLETION
+	~	Dmnl
+	~		|
+
+subjective parking search and out vehicle time=
+	CAR PARKING SEARCH AND OUT VEHICLE STT LOOKUP(average parking search and out vehicle time\
+		*TRIP PER MINUTE)
+	~	Minutes/trips
+	~		|
+
+subjective PT access egress time=
+	PT ACCESS EGRESS STT LOOKUP(PT access egress time*TRIP PER MINUTE)
+	~	Minutes/trips
+	~		|
+
+car users car share on long distance trips=
+	EXP(-beta 8*Smoothed subjective travel time by car[long]*TRIP PER MINUTE)/(EXP(-beta 8\
+		*Smoothed subjective travel time by car[long]*TRIP PER MINUTE
+	)+EXP(-beta 8*Smoothed subjective travel time by PT[long]*TRIP PER MINUTE))
+	~	Dmnl
+	~		|
+
+car users car share on mid distance trips=
+	EXP(-beta 5*Smoothed subjective travel time by car[mid]*TRIP PER MINUTE)/(EXP(-beta 5\
+		*Smoothed subjective travel time by car[mid]*TRIP PER MINUTE
+	)+EXP(-beta 5*Smoothed subjective travel time by PT[mid]*TRIP PER MINUTE))
+	~	Dmnl
+	~		|
+
+car users PT share on long distance trips=
+	EXP(-beta 8*Smoothed subjective travel time by PT[long]*TRIP PER MINUTE)/(EXP(-beta 8\
+		*Smoothed subjective travel time by car[long]*TRIP PER MINUTE
+	)+EXP(-beta 8*Smoothed subjective travel time by PT[long]*TRIP PER MINUTE))
+	~	Dmnl
+	~		|
+
+car users PT share on mid distance trips=
+	EXP(-beta 5*Smoothed subjective travel time by PT[mid]*TRIP PER MINUTE)/(EXP(-beta 5\
+		*Smoothed subjective travel time by PT[mid]*TRIP PER MINUTE
+	)+EXP(-beta 5*Smoothed subjective travel time by car[mid]*TRIP PER MINUTE))
+	~	Dmnl
+	~		|
+
+net annual network expansion=
+	MAX(DELAY1(ROAD NETWORK EXPANSION RATE*Total length of street network,YEAR),-Total length of street network\
+		/YEAR)
+	~	m*road/Year
+	~		|
+
+NUMBER OF LANES PER ROAD FOR BIKE NETWORK COMPLETION=
+	1
+	~	lanes/road
+	~		|
+
+change in space for cyclists=
+	(Public space[cyclists]-previous space for cyclists)/YEAR
+	~	ha/Year
+	~		|
+
+empty city parking spots per daily car trip=
+	(parking spots city-Cars[city]*SPOT PER CAR)/daily car trips
+	~	(spots*Day)/trips
+	~		|
+
+change in bike network completion=
+	bike network completion/REFERENCE BIKE NETWORK COMPLETION
+	~	Dmnl
+	~		|
+
+previous adults with cars[zone]= DELAY FIXED (
+	Population[zone,adult car], YEAR, Population[zone,adult car])
+	~	persons
+	~		|
+
+previous space for cyclists= DELAY FIXED (
+	Public space[cyclists],YEAR, Public space[cyclists])
+	~	ha
+	~		|
+
+bike users bike share on mid distance trips=
+	EXP(-beta 5*Smoothed subjective travel time by bike[mid]*TRIP PER MINUTE)/(EXP(-beta 5\
+		*Smoothed subjective travel time by bike[mid]*TRIP PER MINUTE
+	)+EXP(-beta 5*Smoothed subjective travel time by PT[mid]*TRIP PER MINUTE))
+	~	Dmnl
+	~		|
+
+SPOT PER CAR=
+	1
+	~	spots/cars
+	~		|
+
+TRIP PER MINUTE=
+	1
+	~	trips/Minutes
+	~		|
+
+ebike share=
+	IF THEN ELSE(EBIKE UPTAKE SWITCH=gentle,EBIKE GENTLE UPTAKE LOOKUP(Time/YEAR),EBIKE STEEP UPTAKE LOOKUP\
+		(Time/YEAR))
+	~	Dmnl
+	~		|
+
+gentle=
+	0
+	~	Dmnl
+	~		|
+
+potential adoption rate[zone]=
+	fraction of population with bike access in each zone[zone]*fraction of population receptive to cycling and without bike access\
+		[zone]*CONTACT RATE
+	~	Dmnl
+	~		|
+
+REFERENCE FRACTION OF POPULATION RECEPTIVE TO CYCLING=
+	IF THEN ELSE(TIPPING POINT SWITCH=early,0.58, 0.3)
+	~	Dmnl
+	~		|
+
+fraction of population receptive to cycling and without bike access[zone]=
+	fraction of population receptive to cycling*(1-fraction of population with bike access in each zone\
+		[zone])
+	~	Dmnl
+	~		|
+
+REFERENCE BIKE NETWORK COMPLETION=
+	0.4
+	~	Dmnl
+	~		|
+
+contact fruitfulness[user type]=
+	(EFFECT OF BIKE USAGE ON CONTACT FRUITFULNESS(normalized daily bike trips per user)^\
+		BIKE ADOPTION SENSITIVITY TO USAGE*EFFECT OF PARKING AVAILABILITY ON CONTACT FRUITFULNESS
+	(actual relative to desired bike parking per user[user type])^BIKE ADOPTION SENSITIVITY TO PARKING\
+		)*REFERENCE CONTACT FRUITFULNESS
+	[user type]
+	~	Dmnl
+	~		|
+
+bike users discontinuing[zone, user type]=
+	Bike users[zone,user type]*BIKE DISCONTINUATION FRACTION[user type]/PERIOD OF USE[zone\
+		,user type]
+	~	persons/Year
+	~		|
+
+people adopting bikes[zone, user type]=
+	SUM(Bike users[zone,user type!])*potential adoption rate[zone]*contact fruitfulness[\
+		user type]/DECISION TIME BIKE ADOPTION[user type]
+	~	persons/Year
+	~		|
+
+fraction of population receptive to cycling=
+	IF THEN ELSE(TIPPING POINT SWITCH=early, EARLY EFFECT OF BIKE NETWORK COMPLETION ON POPULATION SUSCEPTIBLE TO CYCLING\
+		(change in bike network completion
+	), LATE EFFECT OF BIKE NETWORK COMPLETION ON POPULATION SUSCEPTIBLE TO CYCLING(change in bike network completion\
+		))*REFERENCE FRACTION OF POPULATION RECEPTIVE TO CYCLING
+	~	Dmnl
+	~		|
+
+BIKE ADOPTION SENSITIVITY TO USAGE=
+	1
+	~	Dmnl [0.5,2]
+	~		|
+
+average physical time on long distance=
+	physical travel time by car[long]*long distance car share+physical travel time by PT\
+		[long]*long distance PT share
+	~	Minutes/trips
+	~		|
+
+average physical time on mid distance=
+	mid distance bike share*physical travel time by bike[mid]+mid distance car share*physical travel time by car\
+		[mid]+mid distance PT share*physical travel time by PT[mid]
+	~	Minutes/trips
+	~		|
+
+REFERENCE IMMIGRATION RATE[zone]=
+	0.0259, 0.0187
+	~	Dmnl/Year
+	~		|
+
+Daily trips per city population within city[trip distance band]= INTEG (
+	net increase in self containment city*UNIT VECTOR MID DISTANCE[trip distance band]+net increase in proximity of destinations\
+		*UNIT VECTOR DESTINATION CHANGE[
+	trip distance band]+net increase in trip frequency[trip distance band],
+		INITIAL DAILY TRIPS PER CITY POPULATION WITHIN CITY[trip distance band])
+	~	trips/(Day*persons)
+	~		|
+
+net migration[zone]=
+	(immigration rate[zone]-OUTMIGRATION RATE[zone])*SUM(Population[zone,car adoption status\
+		!])
+	~	persons/Year
+	~		|
+
+REFERENCE POPULATION DENSITY[zone]=
+	101.1, 72.2
+	~	persons/ha
+	~		|
+
+UNIT VECTOR MID DISTANCE[trip distance band]=
+	0, 1, 0
+	~	Dmnl
+	~		|
+
+net increase in self containment city=
+	DESTINATION SHIFT RATE CITY*Daily trips per city population to ring
+	~	trips/(Day*persons*Year)
+	~		|
+
+EFFECT OF POPULATION DENSITY ON IMMIGRATION RATE(
+	[(0,0)-(8,2)],(0,1.55),(0.8,1.5),(1,1),(1.2,0.5),(2,0.45),(8.4,0))
+	~	Dmnl
+	~		|
+
+normalized population density[zone]=
+	population density[zone]/REFERENCE POPULATION DENSITY[zone]
+	~	Dmnl
+	~		|
+
+net increase in proximity of destinations=
+	DESTINATION SHIFT RATE CITY*Daily trips per city population within city[mid]
+	~	trips/(Day*persons*Year)
+	~		|
+
+physical travel time by car[trip distance band]=
+	UNIT VECTOR MID AND LONG DISTANCE[trip distance band]*average parking search and out vehicle time\
+		+in vehicle time by car[trip distance band]
+	~	Minutes/trips
+	~		|
+
+RELATIVE TIME GAIN DESTINATION SHIFT MID TO SHORT[trip distance band]=
+	0.005, 0, 0
+	~	Dmnl
+	~		|
+
+population density[zone]=
+	SUM(Population[zone, car adoption status!])/LAND AREA[zone]
+	~	persons/ha
+	~		|
+
+immigration rate[zone]=
+	EFFECT OF POPULATION DENSITY ON IMMIGRATION RATE(normalized population density[zone]\
+		)*REFERENCE IMMIGRATION RATE[zone]
+	~	Dmnl/Year
+	~		|
+
+Daily trips per ring population to city= INTEG (
+	-net increase in self containment ring,
+		INITIAL DAILY TRIPS PER RING POPULATION TO CITY)
+	~	trips/(Day*persons)
+	~		|
+
+RELATIVE TIME GAIN DESTINATION SHIFT LONG TO MID[trip distance band]=
+	0, 0.2, 0
+	~	Dmnl
+	~		|
+
+normalized empty city parking spots per daily car trip=
+	empty city parking spots per daily car trip/REFERENCE EMPTY CITY PARKING SPOTS PER DAILY CAR TRIP
+	~	Dmnl
+	~		|
+
+net increase in trip frequency[trip distance band]=
+	net increase in self containment city*RELATIVE TIME GAIN DESTINATION SHIFT LONG TO MID\
+		[trip distance band]+net increase in proximity of destinations*RELATIVE TIME GAIN DESTINATION SHIFT MID TO SHORT\
+		[trip distance band]
+	~	trips/(Day*persons*Year)
+	~		|
+
+SENSITIVITY TO CAR LANE DATA UNCERTAINTY=
+	1
+	~	Dmnl [0.5,1.5]
+	~		|
+
+added subjective cost of cycling time due to infrastructure=
+	EFFECT OF BIKE LANES PER ROAD ON SUBJECTIVE VALUE OF CYCLING TIME(change in bike lanes per road
+	)
+	+EFFECT OF CAR LANES PER ROAD ON SUBJECTIVE VALUE OF CYCLING TIME(change in car lanes per road\
+		)*SENSITIVITY TO CAR LANE DATA UNCERTAINTY
+	+EFFECT OF PARKING SPOTS PER METER ON SUBJECTIVE VALUE OF CYCLING TIME(change in parking spots per meter\
+		)
+	~	Dmnl
+	~		|
+
+PT distance share=
+	daily PT distance/total daily distance travelled
+	~	Dmnl
+	~		|
+
+annual public space entering maintenance[space use]=
+	renewal rate of public space*Public space[space use]
+	~	ha/Year
+	~		|
+
+EFFECT OF BIKE UPTAKE ON RENEWAL RATE(
+	(0,0.667),(0.2,0.68),(0.4,0.72),(0.6,0.787),(0.8,0.88),(1,1),(1.169,1.12),(1.338,1.213\
+		),(1.507,1.28),(1.676,1.32),(1.845,1.333),(3.69,1.333)
+	)
+	~	Dmnl
+	~		|
+
+renewal rate of public space=
+	EFFECT OF BIKE UPTAKE ON RENEWAL RATE(normalized fraction of city population with bike access\
+		)^(RENEWAL RATE SENSITIVITY)*REFERENCE RENEWAL RATE
+	~	Dmnl/Year
+	~		|
+
+RENEWAL RATE SENSITIVITY=
+	1
+	~	Dmnl [0.5,2]
+	~		|
+
+total daily distance travelled=
+	daily car distance+daily cycling distance+daily PT distance+daily walking distance
+	~	km/Day
+	~		|
+
+REFERENCE FRACTION OF URBAN POPULATION WITH BIKE ACCESS=
+	0.271
+	~	Dmnl
+	~		|
+
+car distance share=
+	daily car distance/total daily distance travelled
+	~	Dmnl
+	~		|
+
+bike distance share=
+	daily cycling distance/total daily distance travelled
+	~	Dmnl
+	~		|
+
+REFERENCE RENEWAL RATE=
+	0.03
+	~	Dmnl/Year
+	~		|
+
+walking distance share=
+	daily walking distance/total daily distance travelled
+	~	Dmnl
+	~		|
+
+car network to euclidian distance ratio[trip distance band]=
+	EFFECT OF CAR LANES PER ROAD ON NETWORK TO EUCLIDIAN DISTANCE RATIO(change in car lanes per road\
+		)^CAR NETWORK DISTANCE SENSITIVITY*REFERENCE CAR NETWORK TO EUCLIDIAN DISTANCE RATIO
+	[trip distance band]
+	~	Dmnl
+	~		|
+
+PT NETWORK TO EUCLIDIAN DISTANCE RATIO[trip distance band]=
+	0, 1.2, 1.2
+	~	Dmnl
+	~		|
+
+subjective travel time by bike[trip distance band]=
+	physical travel time by bike[trip distance band]*subjective cost of cycling time
+	~	Minutes/trips
+	~		|
+
+INITIAL SUBJECTIVE TRAVEL TIME BY BIKE[trip distance band]=
+	0, 57, 0
+	~	Minutes/trips
+	~		|
+
+INITIAL SUBJECTIVE TRAVEL TIME BY CAR[trip distance band]=
+	0, 54, 65
+	~	Minutes/trips
+	~		|
+
+INITIAL SUBJECTIVE TRAVEL TIME BY PT[trip distance band]=
+	0, 58, 74
+	~	Minutes/trips
+	~		|
+
+AVERAGE EUCLIDIAN DISTANCE[trip distance band]=
+	1, 5, 8
+	~	km/trips
+	~		|
+
+change in subjective travel time by bike[trip distance band]=
+	(MIN(subjective travel time by bike[trip distance band],MAX STT
+	[trip distance band])-Smoothed subjective travel time by bike[trip distance band])/PERCEPTION TIME
+	~	Minutes/(trips*Year)
+	~		|
+
+MAX STT[trip distance band]=
+	0, 80, 100
+	~	Minutes/trips
+	~		|
+
+Smoothed subjective travel time by car[trip distance band]= INTEG (
+	change in subjective travel time by car[trip distance band],
+		INITIAL SUBJECTIVE TRAVEL TIME BY CAR[trip distance band])
+	~	Minutes/trips
+	~		|
+
+Smoothed subjective travel time by PT[trip distance band]= INTEG (
+	change in subjective travel time by PT[trip distance band],
+		INITIAL SUBJECTIVE TRAVEL TIME BY PT[trip distance band])
+	~	Minutes/trips
+	~		|
+
+change in subjective travel time by car[trip distance band]=
+	(MIN(subjective travel time by car[trip distance band],MAX STT
+	[trip distance band])-Smoothed subjective travel time by car[trip distance band])/PERCEPTION TIME
+	~	Minutes/(trips*Year)
+	~		|
+
+change in subjective travel time by PT[trip distance band]=
+	(MIN(subjective travel time by PT[trip distance band],MAX STT
+	[trip distance band])-Smoothed subjective travel time by PT[trip distance band])/PERCEPTION TIME
+	~	Minutes/(trips*Year)
+	~		|
+
+UNIT VECTOR MID AND LONG DISTANCE[trip distance band]=
+	0, 1, 1
+	~	Dmnl
+	~		|
+
+in vehicle time by car[trip distance band]=
+	car network to euclidian distance ratio[trip distance band]*AVERAGE EUCLIDIAN DISTANCE\
+		[trip distance band]/congested speed
+	*MINUTES PER HOUR
+	~	Minutes/trips
+	~		|
+
+Smoothed subjective travel time by bike[trip distance band]= INTEG (
+	change in subjective travel time by bike[trip distance band],
+		INITIAL SUBJECTIVE TRAVEL TIME BY BIKE[trip distance band])
+	~	Minutes/trips
+	~		|
+
+PT AVERAGE SPEED[trip distance band]=
+	30, 30, 50
+	~	km/Hour
+	~		|
+
+SHARE OF TRIPS OCCURRING IN PEAK TIME=
+	0.4
+	~	Dmnl
+	~		|
+
+PEAK TIME WINDOW=
+	4
+	~	Hour/Day
+	~		|
+
+physical travel time by PT[trip distance band]=
+	in vehicle time by PT[trip distance band]+PHYSICAL WAITING AND CHANGING TIME[trip distance band\
+		]
+	~	Minutes/trips
+	~		|
+
+subjective travel time by car[trip distance band]=
+	in vehicle time by car[trip distance band]+subjective parking search and out vehicle time\
+		*UNIT VECTOR MID AND LONG DISTANCE[trip distance band]
+	~	Minutes/trips
+	~		|
+
+SUBJECTIVE WAITING AND CHANGING TIME[trip distance band]=
+	0, 11.1719, 20.7945
+	~	Minutes/trips
+	~		|
+
+CAR NETWORK DISTANCE SENSITIVITY=
+	1
+	~	Dmnl [0.5,1.5]
+	~		|
+
+REFERENCE CAR NETWORK TO EUCLIDIAN DISTANCE RATIO[trip distance band]=
+	0, 1.26, 1.2
+	~	Dmnl
+	~		|
+
+peak PT riders per hour=
+	SHARE OF TRIPS OCCURRING IN PEAK TIME*daily PT trips/PEAK TIME WINDOW*PERSONS PER TRIP
+	~	persons/Hour
+	~		|
+
+in vehicle time by PT[trip distance band]=
+	AVERAGE EUCLIDIAN DISTANCE[trip distance band]*PT NETWORK TO EUCLIDIAN DISTANCE RATIO\
+		[trip distance band]/PT AVERAGE SPEED
+	[trip distance band]*MINUTES PER HOUR
+	~	Minutes/trips
+	~		|
+
+PHYSICAL WAITING AND CHANGING TIME[trip distance band]=
+	0, 4, 7.939
+	~	Minutes/trips
+	~		|
+
+peak cars per hour=
+	SHARE OF TRIPS OCCURRING IN PEAK TIME*daily car trips/CAR OCCUPANCY RATE/PEAK TIME WINDOW
+	~	cars/Hour
+	~		|
+
+fraction of population with bike access in each zone[zone]=
+	SUM(Bike users[zone,user type!])/SUM(Population[zone,car adoption status!])
+	~	Dmnl
+	~		|
+
+daily long distance car trips=
+	SUM(daily long distance trips[trip distance band!])*long distance car share
+	~	trips/Day
+	~		|
+
+daily long distance PT trips=
+	SUM(daily long distance trips[trip distance band!])*long distance PT share
+	~	trips/Day
+	~		|
+
+daily long distance trips[trip distance band]=
+	UNIT VECTOR LONG DISTANCE[trip distance band]*daily trips in each trip distance band\
+		[trip distance band]
+	~	trips/Day
+	~		|
+
+daily long trips=
+	Daily trips per ring population to city*SUM(Population[ring,car adoption status!])+Daily trips per city population to ring\
+		*SUM(Population[city,car adoption status!])
+	~	trips/Day
+	~		|
+
+daily mid distance car trips=
+	SUM(daily mid distance trips[trip distance band!])*mid distance car share
+	~	trips/Day
+	~		|
+
+daily mid distance cycling trips=
+	SUM(daily mid distance trips[trip distance band!])*mid distance bike share
+	~	trips/Day
+	~		|
+
+long distance car share=
+	population fraction with car access on long distance trips*car users car share on long distance trips
+	~	Dmnl [0,?]
+	~		|
+
+long distance PT share=
+	population fraction with car access on long distance trips*car users PT share on long distance trips\
+		+(1-population fraction with car access on long distance trips
+	)
+	~	Dmnl [0,?]
+	~		|
+
+DESTINATION SHIFT RATE RING=
+	0.005
+	~	Dmnl/Year [0.001,0.01]
+	~		|
+
+daily trips in each trip distance band[trip distance band]=
+	Daily trips per city population within city[trip distance band]*SUM(Population[city,\
+		 car adoption status!])+daily long trips
+	*UNIT VECTOR LONG DISTANCE[trip distance band]
+	~	trips/Day
+	~		|
+
+Daily trips per ring population within ring= INTEG (
+	net increase in self containment ring,
+		INITIAL DAILY TRIPS PER RING POPULATION WITHIN RING)
+	~	trips/(Day*persons)
+	~		|
+
+Daily trips per city population to ring= INTEG (
+	-net increase in self containment city,
+		INITIAL DAILY TRIPS PER CITY POPULATION TO RING)
+	~	trips/(Day*persons)
+	~		|
+
+total daily trips=
+	SUM(daily trips in each trip distance band[trip distance band!])
+	~	trips/Day
+	~		|
+
+city parking spots per car=
+	parking spots city/SUM(Cars[zone!])
+	~	spots/cars
+	~		|
+
+desired car parking space share=
+	DESIRED SHARE OF CAR SPACE USED FOR PARKING*desired motorist space share
+	~	Dmnl
+	~		|
+
+trip distance band:
+	short, mid, long
+	~	
+	~		|
+
+desired distribution of space[space use]=
+	UNIT VECTOR PEDESTRIANS[space use]*DESIRED PEDESTRIAN SPACE SHARE+UNIT VECTOR CYCLISTS
+	[space use]*DESIRED CYCLIST SPACE SHARE+UNIT VECTOR MOTOR TRAFFIC[space use]*desired motor traffic space share\
+		+UNIT VECTOR CAR PARKING[space use]*desired car parking space share
+	~	Dmnl
+	~		|
+
+DESIRED SHARE OF CAR SPACE USED FOR PARKING=
+	0.19
+	~	Dmnl [0,0.29]
+	~		|
+
+desired motor traffic space share=
+	(1-DESIRED SHARE OF CAR SPACE USED FOR PARKING)*desired motorist space share
+	~	Dmnl
+	~		|
+
+UNIT VECTOR LONG DISTANCE[trip distance band]=
+	0, 0, 1
+	~	Dmnl
+	~		|
+
+net change in cars[zone]=
+	change in adults with cars[zone]*CARS PER ADULT WITH CAR[zone]
+	~	cars/Year
+	~		|
+
+Cars[zone]= INTEG (
+	net change in cars[zone],
+		INITIAL CARS[zone])
+	~	cars
+	~		|
+
+net increase in self containment ring=
+	DESTINATION SHIFT RATE RING*Daily trips per ring population to city
+	~	trips/(Day*persons*Year)
+	~		|
+
+INITIAL DAILY TRIPS PER RING POPULATION WITHIN RING=
+	2.3457
+	~	trips/(persons*Day)
+	~		|
+
+YEAR=
+	1
+	~	Year
+	~		|
+
+INITIAL DAILY TRIPS PER CITY POPULATION TO RING=
+	0.3891
+	~	trips/(persons*Day)
+	~		|
+
+daily mid distance PT trips=
+	SUM(daily mid distance trips[trip distance band!])*mid distance PT share
+	~	trips/Day
+	~		|
+
+daily car trips per car=
+	daily car trips/SUM(Cars[zone!])
+	~	trips/(cars*Day)
+	~		|
+
+car trips share=
+	(daily mid distance car trips+daily long distance car trips)/total daily trips
+	~	Dmnl
+	~		|
+
+INITIAL DAILY TRIPS PER CITY POPULATION WITHIN CITY[trip distance band]=
+	2.2149, 1.2026, 0
+	~	trips/(persons*Day)
+	~		|
+
+UNIT VECTOR CAR PARKING[space use]=
+	0, 1, 0, 0
+	~	Dmnl
+	~		|
+
+population fraction with car access on long distance trips=
+	Population[city,adult car]/SUM(Population[city, car adoption status!])*Daily trips per city population to ring\
+		/(Daily trips per ring population to city+Daily trips per city population to ring)+\
+		Population[ring,adult car]/SUM(Population[ring, car adoption status!])*Daily trips per ring population to city\
+		/(Daily trips per ring population to city+Daily trips per city population to ring)
+	~	Dmnl
+	~		|
+
+UNIT VECTOR DESTINATION CHANGE[trip distance band]=
+	1, -1, 0
+	~	Dmnl
+	~		|
+
+DESTINATION SHIFT RATE CITY=
+	0.003
+	~	Dmnl/Year [0.001,0.005]
+	~		|
+
+INITIAL DAILY TRIPS PER RING POPULATION TO CITY=
+	0.445
+	~	trips/(persons*Day)
+	~		|
+
+INITIAL CARS[zone]=
+	408081, 1.57975e+06
+	~	cars
+	~		|
+
+REFERENCE EMPTY CITY PARKING SPOTS PER DAILY CAR TRIP=
+	0.322197
+	~	(spots*Day)/trips
+	~		|
+
+EFFECT OF CAR LANES PER ROAD ON NETWORK TO EUCLIDIAN DISTANCE RATIO(
+	[(0.8,0.8)-(1.7,2)],(0,1.5),(0.2,1.48),(0.4,1.42),(0.6,1.32),(0.8,1.18),(1,1),(1.133\
+		,0.942),(1.266,0.897),(1.399,0.865),(1.532,0.846),(1.665,0.839),(1.667,0.839))
+	~	Dmnl
+	~		|
+
+CAR PARKING SEARCH AND OUT VEHICLE STT LOOKUP(
+	(0,0),(1,2),(2,4.001),(3,6.003),(4,8.01),(5,10.027),(6,12.073),(7,14.189),(8,16.481)\
+		,(9,19.205),(10,22.981),(10.5,25.669),(11,29.298),(11.5,34.382),(12,41.718),(12.5,52.533\
+		),(13,68.718),(13.5,93.178),(14,130.383),(14.5,145),(15,155),(15.5,160),(16,162),(25\
+		,162)
+	)
+	~	Minutes/trips
+	~		|
+
+PT ACCESS EGRESS STT LOOKUP(
+	[(0,0)-(10,100)],(0,0.844),(1,0.956),(2,2.228),(2.5,3.039),(3,4.009),(3.5,5.179),(4,\
+		6.6),(4.5,8.334),(5,10.458),(5.5,13.069),(6,16.283),(6.5,20.245),(7,25.132),(7.5,31.161\
+		),(8,38.599),(8.5,47.771),(9,59.076),(9.5,73.001),(10,90.139))
+	~	Minutes/trips
+	~		|
+
+CYCLING PARKING TIME=
+	6
+	~	Minutes/trips
+	~		|
+
+INITIAL PT CAPACITY=
+	887073
+	~	persons/Hour
+	~		|
+
+LATE EFFECT OF BIKE NETWORK COMPLETION ON POPULATION SUSCEPTIBLE TO CYCLING(
+	[(0,0)-(3,3)],(0,0.01),(0.2,0.3),(0.4,0.55),(0.6,0.75),(0.8,0.95),(1,1),(1.2,1.15),(\
+		1.4,1.4),(1.6,1.8),(1.8,2.6),(2,2.85),(2.25,3),(3,3))
+	~	Dmnl
+	~	The tipping point occurs between 40 and 60 percent completion and \
+		stabilizes at 90 percent completion
+	|
+
+net added capacity per year=
+	NET ADDED PT CAPACITY PER YEAR*PT capacity
+	~	persons/(Hour*Year)
+	~		|
+
+NET ADDED PT CAPACITY PER YEAR=
+	0.001
+	~	Dmnl/Year [0.0005,0.0015]
+	~		|
+
+SEAT CAPACITY TO TOTAL CAPACITY RATIO=
+	0.22
+	~	Dmnl
+	~		|
+
+TIPPING POINT SWITCH=
+	0
+	~	Dmnl [0,1,1]
+	~		|
+
+PT capacity= INTEG (
+	net added capacity per year,
+		INITIAL PT CAPACITY)
+	~	persons/Hour
+	~		|
+
+construction rate[zone]=
+	EFFECT OF HOME DENSITY ON CONSTRUCTION RATE
+	(normalized home density[zone])*REFERENCE CONSTRUCTION RATE[zone]
+	~	Dmnl/Year
+	~		|
+
+seat capacity=
+	SEAT CAPACITY TO TOTAL CAPACITY RATIO*PT capacity
+	~	persons/Hour
+	~		|
+
+early=
+	0
+	~	Dmnl
+	~		|
+
+standing capacity=
+	(1-SEAT CAPACITY TO TOTAL CAPACITY RATIO)*PT capacity
+	~	persons/Hour
+	~		|
+
+total population=
+	SUM(population per zone[zone!])
+	~	persons
+	~		|
+
+population per zone[zone]=
+	SUM(Population[zone,car adoption status!])
+	~	persons
+	~		|
+
+actual relative to desired bike parking per user[user type]=
+	bike parking per user[user type]/desired bike parking per user[user type]
+	~	Dmnl
+	~		|
+
+REFERENCE CONTACT FRUITFULNESS[user type]=
+	0.3, 0.3
+	~	Dmnl
+	~		|
+
+BIKE DISCONTINUATION FRACTION[user type]=
+	0.02, 0.005
+	~	Dmnl
+	~		|
+
+bike parking per user[user type]=
+	Bike parking[user type]/SUM(Bike users[zone!, user type])
+	~	spots/persons
+	~		|
+
+Bike parking[user type]= INTEG (
+	bike parking added[user type],
+		INITIAL BIKE PARKING[user type])
+	~	spots
+	~		|
+
+bike parking added[user type]=
+	change in space for cyclists*BIKE PARKING PER SPACE FOR CYCLISTS ADDED[user type]
+	~	spots/Year
+	~		|
+
+BIKE PARKING PER SPACE FOR CYCLISTS ADDED[user type]=
+	434, 234
+	~	spots/ha
+	~		|
+
+INITIAL BIKE PARKING[user type]=
+	59892, 32292
+	~	spots
+	~		|
+
+CONTACT RATE=
+	2
+	~	Dmnl [1,3]
+	~		|
+
+desired bike parking per user[user type]=
+	0.0353, 0.0828
+	~	spots/persons
+	~		|
+
+daily bike trips per user=
+	daily mid distance cycling trips/SUM(Bike users[zone!,user type!])
+	~	trips/(persons*Day)
+	~		|
+
+UNIT VECTOR USER TYPE CHANGE[user type]=
+	1, -1
+	~	Dmnl
+	~		|
+
+Bike users[zone, user type]= INTEG (
+	people adopting bikes[zone,user type]-bike users discontinuing[zone, user type]
+	+UNIT VECTOR USER TYPE CHANGE[user type]*bikesharing users upgrading to private bikes\
+		[zone],
+		INITIAL BIKE USERS[zone, user type])
+	~	persons
+	~		|
+
+bikesharing users upgrading to private bikes[zone]=
+	Bike users[zone,sharing]*BIKESHARING TO PRIVATE BIKE UPGRADE FRACTION/UPGRADE TIME
+	~	persons/Year
+	~		|
+
+DECISION TIME BIKE ADOPTION[user type]=
+	3, 1;
+	~	Year
+	~		|
+
+INITIAL BIKE USERS[zone,user type]=
+	283614, 294309; 1.41195e+06, 95691;
+	~	persons
+	~		|
+
+PERIOD OF USE[zone,user type]=
+	10, 2; 10, 2;
+	~	Year
+	~		|
+
+user type:
+	private, sharing
+	~	
+	~		|
+
+DESIRED CYCLIST SPACE SHARE=
+	0.174
+	~	Dmnl
+	~		|
+
+desired motorist space share=
+	1-DESIRED CYCLIST SPACE SHARE-DESIRED PEDESTRIAN SPACE SHARE
+	~	Dmnl
+	~		|
+
+UNIT VECTOR MOTOR TRAFFIC[space use]=
+	1, 0, 0, 0
+	~	Dmnl
+	~		|
+
+Public space[space use]= INTEG (
+	desired distribution of space[space use]*SUM(annual public space finishing maintenance\
+		[space use!])-annual public space entering maintenance
+	[space use]+net annual street construction[space use],
+		INITIAL PUBLIC SPACE[space use])
+	~	ha
+	~		|
+
+UNIT VECTOR PEDESTRIANS[space use]=
+	0, 0, 1, 0
+	~	Dmnl
+	~		|
+
+EARLY EFFECT OF BIKE NETWORK COMPLETION ON POPULATION SUSCEPTIBLE TO CYCLING(
+	[(0,0)-(4,2)],(0,0.01),(0.2,0.04),(0.4,0.16),(0.6,0.36),(0.8,0.64),(1,1),(1.2,1.203)\
+		,(1.4,1.362),(1.6,1.475),(1.8,1.543),(2,1.565),(4,1.565))
+	~	Dmnl
+	~	The tipping point occurs between 20 and 60 percent completion and \
+		stabilizes at 80 percent completion
+	|
+
+net annual street construction[space use]=
+	IF THEN ELSE(net annual network expansion>0, desired distribution of space[space use\
+		], current distribution of public space
+	[space use])* net annual network expansion*AVERAGE STREET WIDTH/M2 PER HA/ROAD
+	~	ha/Year
+	~		|
+
+UNIT VECTOR CYCLISTS[space use]=
+	0, 0, 0, 1
+	~	Dmnl
+	~		|
+
+DESIRED PEDESTRIAN SPACE SHARE=
+	0.584
+	~	Dmnl [0.584,0.638]
+	~		|
+
+parking spots city=
+	public parking spots city+Residential car parking spots city+COMMERCIAL CAR PARKING SPOTS CITY
+	~	spots
+	~		|
+
+CAR ADOPTION SENSITIVITY TO USAGE=
+	1
+	~	Dmnl [0.5,2]
+	~		|
+
+deaths[zone]=
+	DEATH RATE*SUM(Population[zone,car adoption status!])
+	~	persons/Year
+	~		|
+
+car adoption status of young adults settling[zone, car adoption status]=
+	normalized car adoption by adults[zone, car adoption status]+percentage point shift in car adoption by young adults relative to adults\
+		[car adoption status]
+	~	Dmnl
+	~		|
+
+Population[zone,car adoption status]= INTEG (
+	births[zone]*YOUTH CAR STATUS[car adoption status]+net migration[zone]*current car adoption status\
+		[zone,car adoption status]-young adults settling
+	[zone]*YOUTH CAR STATUS[car adoption status]+young adults settling[zone]*car adoption status of young adults settling\
+		[zone,car adoption status]-deaths[zone
+	]*normalized car adoption by adults[zone,car adoption status],
+		INITIAL POPULATION[zone,car adoption status])
+	~	persons
+	~		|
+
+COMMERCIAL CAR PARKING SPOTS CITY=
+	70540
+	~	spots
+	~		|
+
+percentage point shift in car adoption by young adults relative to adults[car adoption status\
+		]=
+	UNIT VECTOR CAR ADOPTION CHANGE
+	[car adoption status]*REFERENCE SHIFT IN CAR ADOPTION*EFFECT OF CAR USAGE ON SHIFT IN CAR ADOPTION\
+		(normalized daily car trips per car
+	)^CAR ADOPTION SENSITIVITY TO USAGE
+	~	Dmnl
+	~		|
+
+relative car adoption by adults[zone,car adoption status]=
+	UNIT VECTOR ADULT[car adoption status]*current car adoption status[zone,car adoption status\
+		]
+	~	Dmnl
+	~		|
+
+subjective cost of cycling time=
+	REFERENCE SUBJECTIVE COST FACTOR+added subjective cost of cycling time due to infrastructure\
+		*SUBJECTIVE CYCLING TIME SENSITIVITY
+	~	Dmnl
+	~		|
+
+REFERENCE HOME DENSITY[zone]=
+	66.2, 33.51
+	~	homes/ha
+	~		|
+
+average private parking spots per home=
+	Residential car parking spots city/Homes[city]
+	~	spots/homes
+	~		|
+
+REFERENCE SHIFT IN CAR ADOPTION=
+	0.15
+	~	Dmnl [0.05,0.25]
+	~		|
+
+normalized car adoption by adults[zone,car adoption status]=
+	relative car adoption by adults[zone,car adoption status]/SUM(relative car adoption by adults\
+		[zone,car adoption status!])
+	~	Dmnl
+	~		|
+
+residential parking constructed=
+	PARKING SPOTS PER HOME CONSTRUCTED*home construction[city]
+	~	spots/Year
+	~		|
+
+residential parking demolished=
+	average private parking spots per home*home demolition[city]
+	~	spots/Year
+	~		|
+
+normalized daily car trips per car=
+	daily car trips per car/REFERENCE DAILY CAR TRIPS PER CAR
+	~	Dmnl
+	~		|
+
+normalized home density[zone]=
+	home density[zone]/REFERENCE HOME DENSITY[zone]
+	~	Dmnl
+	~		|
+
+LAND AREA[zone]=
+	21100, 65400
+	~	ha
+	~		|
+
+BIRTH RATE[zone]=
+	0.0126, 0.0156
+	~	Dmnl/Year
+	~		|
+
+births[zone]=
+	BIRTH RATE[zone]*SUM(Population[zone,car adoption status!])
+	~	persons/Year
+	~		|
+
+OUTMIGRATION RATE[zone]=
+	0.0295, 0.0216
+	~	Dmnl/Year
+	~		|
+
+daily car trips=
+	daily mid distance car trips+daily long distance car trips
+	~	trips/Day
+	~		|
+
+EFFECT OF CAR USAGE ON SHIFT IN CAR ADOPTION(
+	(0,1.3),(0.5,1.3),(0.6,1.29),(0.7,1.27),(0.8,1.23),(0.9,1.13),(1,1),(1.1,0.87),(1.2,\
+		0.77),(1.3,0.73),(1.4,0.71),(1.5,0.7),(4,0.7)
+	)
+	~	Dmnl
+	~		|
+
+car adoption status:
+	young adult, adult car, adult no car
+	~	
+	~		|
+
+INITIAL POPULATION[zone, car adoption status]=
+	523323, 523181, 1.08661e+06; 1.21314e+06, 2.225e+06, 1.28119e+06;
+	~	persons
+	~		|
+
+YOUTH CAR STATUS[car adoption status]=
+	1, 0, 0
+	~	Dmnl
+	~		|
+
+REFERENCE CONSTRUCTION RATE[zone]=
+	0.014, 0.021
+	~	Dmnl/Year
+	~		|
+
+CARS PER ADULT WITH CAR[zone]=
+	0.78, 0.71
+	~	cars/persons
+	~		|
+
+home density[zone]=
+	Homes[zone]/LAND AREA[zone]
+	~	homes/ha
+	~		|
+
+fraction of city population with car access=
+	Population[city,adult car]/SUM(Population[city,car adoption status!])
+	~	Dmnl
+	~		|
+
+YOUTH AGING TIME=
+	20
+	~	Year
+	~		|
+
+DEATH RATE=
+	0.0065
+	~	Dmnl/Year
+	~		|
+
+INITIAL HOMES[zone]=
+	1.39675e+06,2.19182e+06
+	~	homes
+	~		|
+
+UNIT VECTOR ADULT[car adoption status]=
+	0, 1, 1
+	~	Dmnl
+	~		|
+
+current car adoption status[zone,car adoption status]=
+	Population[zone,car adoption status]/SUM(Population[zone,car adoption status!])
+	~	Dmnl
+	~		|
+
+Homes[zone]= INTEG (
+	home construction[zone]-home demolition[zone],
+		INITIAL HOMES[zone])
+	~	homes
+	~		|
+
+home construction[zone]=
+	DELAY1(construction rate[zone]*Homes[zone], CONSTRUCTION DELAY)
+	~	homes/Year
+	~		|
+
+young adults settling[zone]=
+	Population[zone,young adult]/YOUTH AGING TIME
+	~	persons/Year
+	~		|
+
+home demolition[zone]=
+	Homes[zone]/YEARS UNTIL DEMOLISHED
+	~	homes/Year
+	~		|
+
+SUBJECTIVE CYCLING TIME SENSITIVITY=
+	1
+	~	Dmnl [0.5,1.5]
+	~		|
+
+UNIT VECTOR CAR ADOPTION CHANGE[car adoption status]=
+	0, -1, 1
+	~	Dmnl
+	~		|
+
+Built up area and greenfield= INTEG (
+	-SUM(net annual street construction[space use!]),
+		INITIAL GREENFIELD AND BUILT UP SPACE)
+	~	ha
+	~		|
+
+overcrowding level=
+	IF THEN ELSE(peak PT riders per hour<seat capacity, 1, MIN(2,1+(peak PT riders per hour\
+		-seat capacity)/standing capacity
+	))
+	~	Dmnl
+	~		|
+
+normalized daily bike trips per user=
+	daily bike trips per user/REFERENCE BIKE TRIPS PER USER
+	~	Dmnl
+	~		|
+
+average cycling speed=
+	ebike share*EBIKE SPEED+(1-ebike share)*PEDAL BIKE SPEED
+	~	km/Hour
+	~		|
+
+average parking search and out vehicle time=
+	EFFECT OF PARKING SPOTS ON PARKING SEARCH AND EGRESS TIME TO CITY(normalized empty city parking spots per daily car trip
+	)^PARKING SEARCH AND EGRESS SENSITIVITY*REFERENCE SEARCH AND EGRESS TIME
+	~	Minutes/trips
+	~		|
+
+PT access egress time=
+	EFFECT OF SIDEWALK WIDTH ON PT ACCESS EGRESS TIME(normalized sidewalk width per road\
+		)^SENSITIVITY TO SIDEWALK DATA UNCERTAINTY*REFERENCE PT ACCESS EGRESS TIME
+	~	Minutes/trips
+	~		|
+
+change in parking spots per meter=
+	parking spots per meter of road/REFERENCE PARKING SPOTS PER METER OF ROAD NETWORK
+	~	Dmnl
+	~		|
+
+BIKE ADOPTION SENSITIVITY TO PARKING=
+	1
+	~	Dmnl [0.5,2]
+	~		|
+
+change in bike lanes per road=
+	separated bike lanes per road/REFERENCE BIKE LANES PER ROAD
+	~	Dmnl
+	~		|
+
+change in car lanes per road=
+	average car lanes per road/REFERENCE CAR LANES PER ROAD
+	~	Dmnl
+	~		|
+
+REFERENCE BIKE TRIPS PER USER=
+	0.56
+	~	trips/(persons*Day)
+	~		|
+
+normalized sidewalk width per road=
+	sidewalk width per road/REFERENCE SIDEWALK WIDTH PER ROAD
+	~	Dmnl
+	~		|
+
+cycling network to euclidian distance ratio=
+	EFFECT OF BIKE LANES PER ROAD ON NETWORK TO EUCLIDIAN DISTANCE RATIO(change in bike lanes per road\
+		)^CYCLING NETWORK DISTANCE SENSITIVITY*REFERENCE NETWORK TO EUCLIDIAN DISTANCE RATIO
+	~	Dmnl [?,?,0.1]
+	~		|
+
+CYCLING NETWORK DISTANCE SENSITIVITY=
+	1
+	~	Dmnl [0.5,1.5]
+	~		|
+
+PARKING SEARCH AND EGRESS SENSITIVITY=
+	1
+	~	Dmnl [0.5,2]
+	~		|
+
+SENSITIVITY TO SIDEWALK DATA UNCERTAINTY=
+	1
+	~	Dmnl [0.5,2]
+	~		|
+
+EBIKE UPTAKE SWITCH=
+	0
+	~	Dmnl [0,1,1]
+	~		|
+
+EBIKE STEEP UPTAKE LOOKUP(
+	(2020,0.03),(2030,0.09),(2050,0.81),(2060,0.81)
+	)
+	~	Dmnl
+	~		|
+
+zone:
+	city, ring
+	~	
+	~		|
+
+separated bike lanes per road=
+	total cycling lane length/Total length of street network
+	~	lanes/road [0,?]
+	~		|
+
+annual public space finishing maintenance[space use]=
+	Public space available for reallocation[space use]/ROAD WORKS DELAY
+	~	ha/Year
+	~		|
+
+average car lanes per road=
+	MIN(4,total car lane length/Total length of street network)
+	~	lanes/road [0,4]
+	~		|
+
+Public space available for reallocation[space use]= INTEG (
+	annual public space entering maintenance[space use]-annual public space finishing maintenance\
+		[space use],
+		INITIAL PUBLIC SPACE AVAILABLE FOR REALLOCATION[space use])
+	~	ha
+	~		|
+
+space use:
+	motor traffic, car parking, pedestrians, cyclists
+	~	
+	~		|
+
+parking spots per meter of road=
+	parking spots city/Total length of street network
+	~	spots/(road*m)
+	~		|
+
+sidewalk width per road=
+	Public space[pedestrians]*M2 PER HA/Total length of street network
+	~	m/road
+	~		|
+
+AVERAGE STREET WIDTH=
+	17
+	~	m
+	~		|
+
+Total length of street network= INTEG (
+	net annual network expansion,
+		INITIAL LENGHT OF ROAD NETWORK)
+	~	road*m
+	~		|
+
+total car lane length=
+	Public space[motor traffic]*M2 PER HA/AVERAGE LANE WIDTH
+	~	m*lanes
+	~		|
+
+total cycling lane length=
+	Public space[cyclists]*M2 PER HA/AVERAGE LANE WIDTH*CYCLING LANE PER LANE
+	~	m*lanes
+	~		|
+
+current distribution of public space[space use]=
+	Public space[space use]/SUM(Public space[space use!])
+	~	Dmnl
+	~		|
+
+INITIAL PUBLIC SPACE[space use]=
+	827, 197, 1515, 138
+	~	ha
+	~		|
+
+INITIAL PUBLIC SPACE AVAILABLE FOR REALLOCATION[space use]=
+	6.11, 1.45, 11.37, 1.13
+	~	ha
+	~		|
+
+public parking spots city=
+	Public space[car parking]/PARKING SPOT AREA
+	~	spots
+	~		|
+
+ROAD=
+	1
+	~	road
+	~		|
+
+ROAD WORKS DELAY=
+	0.25
+	~	Year
+	~		|
+
+beta 5=
+	0.0878
+	~	Dmnl
+	~		|
+
+beta 8=
+	0.0799
+	~	Dmnl
+	~		|
+
+MINUTES PER HOUR=
+	60
+	~	Minutes/Hour
+	~		|
+
+REFERENCE NETWORK TO EUCLIDIAN DISTANCE RATIO=
+	1.4
+	~	Dmnl [1,1.5,0.1]
+	~		|
+
+ROAD NETWORK EXPANSION RATE=
+	0
+	~	Dmnl/Year
+	~		|
+
+EFFECT OF BIKE USAGE ON CONTACT FRUITFULNESS(
+	(0,0),(0.2,0.04),(0.4,0.16),(0.6,0.36),(0.8,0.64),(1,1),(1.2,1.36),(1.4,1.64),(1.6,1.84\
+		),(1.8,1.96),(2,2)
+	)
+	~	Dmnl
+	~		|
+
+EFFECT OF PARKING AVAILABILITY ON CONTACT FRUITFULNESS(
+	(0,0),(0.2,0.04),(0.4,0.16),(0.6,0.36),(0.8,0.64),(1,1),(1.2,1.36),(1.4,1.64),(1.6,1.84\
+		),(1.8,1.96),(2,2),(6,2)
+	)
+	~	Dmnl
+	~		|
+
+WALKING SPEED=
+	3
+	~	km/Hour
+	~		|
+
+peak network density=
+	MIN(peak cars per hour/total car lane length,COLLISION DENSITY)
+	~	cars/(lanes*m*Hour)
+	~		|
+
+REFERENCE SIDEWALK WIDTH PER ROAD=
+	9.66
+	~	m/road
+	~		|
+
+Residential car parking spots city= INTEG (
+	residential parking constructed-residential parking demolished,
+		INITIAL RESIDENTIAL PARKING SPOTS CITY)
+	~	spots
+	~		|
+
+BIKESHARING TO PRIVATE BIKE UPGRADE FRACTION=
+	0.05
+	~	Dmnl [0.01,0.1]
+	~		|
+
+PARKING SPOTS PER HOME CONSTRUCTED=
+	0.15
+	~	spots/homes [0,0.3]
+	~		|
+
+EBIKE SPEED=
+	25
+	~	km/Hour
+	~		|
+
+EBIKE GENTLE UPTAKE LOOKUP(
+	(2020,0.03),(2030,0.09),(2050,0.27),(2060,0.27)
+	)
+	~	Dmnl
+	~		|
+
+PEDAL BIKE SPEED=
+	18
+	~	km/Hour
+	~		|
+
+REFERENCE PT ACCESS EGRESS TIME=
+	4.89
+	~	Minutes/trips
+	~		|
+
+EFFECT OF SIDEWALK WIDTH ON PT ACCESS EGRESS TIME(
+	[(0,0)-(2,4)],(0,4),(0.2,3.88),(0.4,3.52),(0.6,2.92),(0.8,2.08),(1,1),(1.2,0.82),(1.4\
+		,0.68),(1.6,0.58),(1.8,0.52),(2,0.5))
+	~	Dmnl
+	~		|
+
+UPGRADE TIME=
+	2
+	~	Year
+	~		|
+
+EFFECT OF BIKE LANES PER ROAD ON NETWORK TO EUCLIDIAN DISTANCE RATIO(
+	[(0.8,0.8)-(6,2)],(0,1.5),(0.2,1.48),(0.4,1.42),(0.6,1.32),(0.8,1.18),(1,1),(1.3,0.928\
+		),(1.6,0.872),(1.9,0.832),(2.2,0.808),(2.5,0.8),(6,0.8))
+	~	Dmnl
+	~		|
+
+INITIAL RESIDENTIAL PARKING SPOTS CITY=
+	460179
+	~	spots
+	~		|
+
+EFFECT OF CAR LANES PER ROAD ON SUBJECTIVE VALUE OF CYCLING TIME(
+	(0,-0.1),(0.42,-0.1),(0.536,-0.09),(0.652,-0.075),(0.768,-0.055),(0.884,-0.03),(1,0)\
+		,(1.134,0.03),(1.268,0.065),(1.402,0.1),(1.536,0.145),(1.67,0.2),(4,0.2)
+	)
+	~	Dmnl
+	~		|
+
+REFERENCE SUBJECTIVE COST FACTOR=
+	1.96
+	~	Dmnl
+	~		|
+
+REFERENCE CAR LANES PER ROAD=
+	2.4
+	~	lanes/road
+	~		|
+
+EFFECT OF PARKING SPOTS PER METER ON SUBJECTIVE VALUE OF CYCLING TIME(
+	[(-0.06,-0.06)-(1.6,0.06)],(0,-0.05),(0.2,-0.048),(0.4,-0.042),(0.6,-0.032),(0.8,-0.018\
+		),(1,0),(1.1,0.018),(1.2,0.032),(1.3,0.042),(1.4,0.048),(1.6,0.05),(25,0.05))
+	~	Dmnl
+	~		|
+
+CYCLING LANE PER LANE=
+	1
+	~	Dmnl
+	~		|
+
+REFERENCE BIKE LANES PER ROAD=
+	0.4
+	~	lanes/road
+	~		|
+
+REFERENCE PARKING SPOTS PER METER OF ROAD NETWORK=
+	0.47
+	~	spots/(m*road)
+	~		|
+
+EFFECT OF BIKE LANES PER ROAD ON SUBJECTIVE VALUE OF CYCLING TIME(
+	(0,0.1),(0.2,0.096),(0.4,0.084),(0.6,0.064),(0.8,0.036),(1,0),(1.3,-0.036),(1.6,-0.085\
+		),(1.9,-0.14),(2.2,-0.19),(2.5,-0.2),(6,-0.2)
+	)
+	~	Dmnl
+	~		|
+
+INITIAL LENGHT OF ROAD NETWORK=
+	1.567e+06
+	~	road*m
+	~		|
+
+PERSONS PER TRIP=
+	1
+	~	persons/trips
+	~		|
+
+CAR OCCUPANCY RATE=
+	1.2
+	~	trips/cars
+	~		|
+
+INITIAL GREENFIELD AND BUILT UP SPACE=
+	18423
+	~	ha
+	~		|
+
+daily PT trips=
+	daily long distance PT trips+daily mid distance PT trips
+	~	trips/Day
+	~		|
+
+REFERENCE DAILY CAR TRIPS PER CAR=
+	0.548
+	~	trips/(Day*cars)
+	~		|
+
+PERCEPTION TIME=
+	3
+	~	Year [1,5]
+	~		|
+
+congested speed=
+	MAX(WALKING SPEED,AVERAGE SPEED LIMIT*(1-peak network density/COLLISION DENSITY))
+	~	km/Hour [0,?]
+	~		|
+
+EFFECT OF HOME DENSITY ON CONSTRUCTION RATE(
+	[(0,0)-(8,2)],(0,1.55),(0.8,1.5),(1,1),(1.2,0.5),(2,0.45),(8.4,0))
+	~	Dmnl
+	~		|
+
+REFERENCE SEARCH AND EGRESS TIME=
+	11.381
+	~	Minutes/trips
+	~		|
+
+EFFECT OF PARKING SPOTS ON PARKING SEARCH AND EGRESS TIME TO CITY(
+	[(0,0)-(15,2)],(0,1.23),(0.2,1.221),(0.4,1.193),(0.6,1.147),(0.8,1.083),(1,1),(1.2,0.91\
+		),(1.4,0.78),(1.6,0.68),(1.8,0.58),(2,0.52),(2.219,0.439),(15,0.439))
+	~	Dmnl
+	~		|
+
+PARKING SPOT AREA=
+	0.00096
+	~	ha/spots
+	~		|
+
+overcrowding multiplier=
+	overcrowding level*overcrowding level
+	~	Dmnl
+	~		|
+
+CONSTRUCTION DELAY=
+	5
+	~	Year
+	~		|
+
+YEARS UNTIL DEMOLISHED=
+	100
+	~	Year [60,110]
+	~		|
+
+AVERAGE LANE WIDTH=
+	2.2
+	~	m/lanes
+	~		|
+
+M2 PER HA=
+	10000
+	~	m*m/ha
+	~		|
+
+AVERAGE SPEED LIMIT=
+	30
+	~	km/Hour
+	~		|
+
+COLLISION DENSITY=
+	0.05639
+	~	cars/(lanes*m*Hour)
+	~		|
+
+********************************************************
+	.Control
+********************************************************~
+		Simulation Control Parameters
+	|
+
+FINAL TIME  = 2050
+	~	Year
+	~	The final time for the simulation.
+	|
+
+INITIAL TIME  = 2020
+	~	Year
+	~	The initial time for the simulation.
+	|
+
+SAVEPER  = 
+        TIME STEP
+	~	Year [0,?]
+	~	The frequency with which output is stored.
+	|
+
+TIME STEP  = 0.0625
+	~	Year [0,?]
+	~	The time step for the simulation.
+	|
+
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Reference modes
+$-1--1--1,0,|12||-1--1--1|-1--1--1|-1--1--1|-1--1--1|-1--1--1|96,96,63,0
+10,1,daily long distance car trips,38,489,71,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,2,daily mid distance car trips,-110,489,55,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,3,daily long distance PT trips,322,489,59,24,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,4,daily mid distance PT trips,186,489,55,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,5,daily mid distance cycling trips,464,489,61,33,8,2,0,3,-1,1,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,6,average cycling speed,1151,1033,62,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,7,car trips share,988,514,54,22,8,3,0,0,-1,1,0,0,0,0,0,0,0,0
+1,8,1,7,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(518,690)|
+1,9,2,7,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(496,644)|
+10,10,PT trips share,1169,514,54,22,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,11,bike trips share,1335,514,47,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,12,4,10,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(647,638)|
+1,13,3,10,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(743,707)|
+1,14,5,11,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(856,742)|
+12,15,0,101,-128,195,20,8,7,0,58,-1,1,0,0,0-0-0,0-0-0,Arial|24|B|0-166-214,0,0,256,0,0,0
+Main reference modes
+10,16,total daily trips,1129,637,40,18,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,17,16,7,1,0,0,0,0,64,0,-1--1--1,,1|(1055,605)|
+10,18,AVERAGE EUCLIDIAN DISTANCE,176,375,47,27,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,19,car distance share,-18,-28,46,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,20,PT distance share,116,-28,46,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,21,bike distance share,245,-28,50,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,22,walking distance share,382,-28,54,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,23,Daily trips per city population within city,667,396,65,33,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,24,daily walking distance,637,261,50,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,25,daily cycling distance,411,261,48,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,26,daily PT distance,193,261,42,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,27,daily car distance,-19,261,42,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,28,total daily distance travelled,286,108,51,22,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,29,23,24,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(668,332)|
+1,30,18,25,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(272,341)|
+1,31,18,26,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(158,328)|
+1,32,1,27,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(-35,366)|
+1,33,2,27,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(-90,318)|
+1,34,4,26,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(139,346)|
+1,35,3,26,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(274,378)|
+1,36,5,25,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(356,362)|
+1,37,27,19,1,0,0,0,0,192,0,-1--1--1,,1|(15,145)|
+1,38,26,20,1,0,0,0,0,192,0,-1--1--1,,1|(192,141)|
+1,39,25,21,1,0,0,0,0,192,0,-1--1--1,,1|(335,75)|
+1,40,24,22,1,0,0,0,0,192,0,-1--1--1,,1|(597,146)|
+1,41,27,28,1,0,0,0,0,192,0,-1--1--1,,1|(73,203)|
+1,42,26,28,1,0,0,0,0,192,0,-1--1--1,,1|(284,155)|
+1,43,25,28,1,0,0,0,0,192,0,-1--1--1,,1|(355,162)|
+1,44,24,28,1,0,0,0,0,192,0,-1--1--1,,1|(495,187)|
+1,45,28,19,1,0,0,0,0,192,0,-1--1--1,,1|(117,66)|
+1,46,28,20,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,47,28,21,1,0,0,0,0,192,0,-1--1--1,,1|(288,32)|
+1,48,28,22,1,0,0,0,0,192,0,-1--1--1,,1|(345,38)|
+12,49,0,201,-34,287,42,3,7,0,43,5,1,0,0,0-166-214,0-0-0,Arial|10||0-0-0,0,0,256,0,0,0
+Modal split - distance traveled
+10,50,Population,153,342,48,10,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,51,Population,349,299,48,10,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,52,Population,554,299,48,10,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,53,18,24,0,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(0,0)|
+1,54,18,27,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(43,311)|
+10,55,Population,548,359,48,10,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,56,55,24,1,0,0,0,1,64,0,192-192-192,|||0-0-0,1|(566,314)|
+1,57,16,10,1,0,0,0,0,192,0,-1--1--1,,1|(1160,581)|
+1,58,16,11,1,0,0,0,0,192,0,-1--1--1,,1|(1265,580)|
+12,59,0,1188,-128,304,20,8,7,0,58,-1,1,0,0,0-0-0,0-0-0,Arial|24|B|0-166-214,0,0,256,0,0,0
+Other outcomes of interest
+12,60,0,1173,739,292,43,3,7,0,43,5,1,0,0,0-166-214,0-0-0,Arial|10||0-0-0,0,0,256,0,0,0
+Bike access
+12,61,0,1179,195,292,43,3,7,0,43,5,1,0,0,0-166-214,0-0-0,Arial|10||0-0-0,0,0,256,0,0,0
+Subjective travel time
+12,62,0,778,1165,292,43,3,7,0,43,5,1,0,0,0-166-214,0-0-0,Arial|10||0-0-0,0,0,256,0,0,0
+Physical travel time
+10,63,variation in subjective travel time by bike,985,200,70,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,64,variation in subjective travel time by car,1165,200,69,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,65,variation in subjective travel time by PT,1353,202,69,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,66,physical travel time by bike,731,1309,60,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,67,physical travel time by car,634,1309,60,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,68,physical travel time by PT,828,1309,60,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,69,physical travel time by foot,959,1164,64,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,70,WALKING SPEED,1166,1309,51,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,71,70,69,1,0,0,0,0,192,0,-1--1--1,,1|(1066,1269)|
+10,72,MINUTES PER HOUR,1248,1309,54,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,73,72,69,1,0,0,0,0,192,0,-1--1--1,,1|(1141,1240)|
+10,74,mid distance bike share,543,1309,54,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,75,mid distance car share,372,1309,54,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,76,mid distance PT share,458,1309,54,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,77,average physical time on mid distance,595,1164,77,32,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,78,75,77,1,0,0,0,0,192,0,-1--1--1,,1|(426,1242)|
+1,79,76,77,1,0,0,0,0,192,0,-1--1--1,,1|(469,1272)|
+1,80,74,77,1,0,0,0,0,192,0,-1--1--1,,1|(541,1231)|
+1,81,66,77,1,0,0,0,0,192,0,-1--1--1,,1|(698,1241)|
+1,82,67,77,1,0,0,0,0,192,0,-1--1--1,,1|(632,1228)|
+1,83,68,77,1,0,0,0,0,192,0,-1--1--1,,1|(728,1227)|
+10,84,average physical time on long distance,783,1164,79,31,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,85,67,84,1,0,0,0,0,192,0,-1--1--1,,1|(657,1251)|
+1,86,68,84,1,0,0,0,0,192,0,-1--1--1,,1|(787,1274)|
+10,87,long distance PT share,1011,1309,56,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,88,long distance car share,922,1309,56,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,89,88,84,1,0,0,0,0,192,0,-1--1--1,,1|(886,1242)|
+1,90,87,84,1,0,0,0,0,192,0,-1--1--1,,1|(909,1236)|
+10,91,AVERAGE EUCLIDIAN DISTANCE,1091,1309,47,27,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,92,91,69,1,0,0,0,0,64,0,-1--1--1,,1|(1016,1288)|
+10,93,AVERAGE EUCLIDIAN DISTANCE,1339,291,53,33,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,94,93,64,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(1239,285)|
+1,95,93,65,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(1355,244)|
+10,96,INITIAL SUBJECTIVE TRAVEL TIME BY BIKE,820,351,78,44,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,97,INITIAL SUBJECTIVE TRAVEL TIME BY CAR,1126,351,78,44,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,98,96,63,1,0,0,0,0,192,0,-1--1--1,,1|(852,290)|
+1,99,97,64,1,0,0,0,0,192,0,-1--1--1,,1|(1112,279)|
+10,100,INITIAL SUBJECTIVE TRAVEL TIME BY PT,1438,351,84,27,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,101,100,65,1,0,0,0,0,64,0,-1--1--1,,1|(1389,293)|
+10,102,Smoothed subjective travel time by bike,973,351,61,33,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,103,Smoothed subjective travel time by car,1279,351,61,33,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,104,Smoothed subjective travel time by PT,1598,351,61,33,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,105,104,65,1,0,0,0,0,192,0,-1--1--1,,1|(1488,336)|
+1,106,103,64,1,0,0,0,0,192,0,-1--1--1,,1|(1216,318)|
+1,107,102,63,1,0,0,0,0,192,0,-1--1--1,,1|(940,287)|
+10,108,subjective travel time by car,716,1082,63,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,109,subjective travel time by PT,966,1082,63,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,110,INITIAL PUBLIC SPACE,859,67,72,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,111,variation in pedestrian space,991,-29,64,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,112,Public space,985,67,60,12,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,113,112,111,1,0,0,0,0,192,0,-1--1--1,,1|(961,23)|
+1,114,110,111,1,0,0,0,0,192,0,-1--1--1,,1|(857,13)|
+12,115,0,1170,512,292,43,3,7,0,43,5,1,0,0,0-166-214,0-0-0,Arial|10||0-0-0,0,0,256,0,0,0
+Modal split - number of trips
+12,116,0,794,1079,334,27,8,7,0,42,-1,1,0,0,0-0-0,0-0-0,Arial|14||0-0-0,0,0,256,0,0,0
+Used to define the level of change in trip frequency after destination shift to maintain constant travel time
+10,117,bike network completion,1120,-28,55,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+12,118,0,1200,-29,292,43,3,7,0,43,5,1,0,0,0-166-214,0-0-0,Arial|10||0-0-0,0,0,256,0,0,0
+Space
+10,119,fraction of city population with bike access,1000,738,93,27,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,120,fraction of ring population with bike access,1187,739,99,31,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Public space
+$-1--1--1,0,|12||-1--1--1|-1--1--1|-1--1--1|-1--1--1|-1--1--1|96,96,55,0
+11,1,0,1778,478,6,8,2,3,0,0,4,0,0,0,0,0,0,0,0,0
+11,2,0,2105,350,6,8,2,3,0,0,4,0,0,0,0,0,0,0,0,0
+10,3,PARKING SPOT AREA,1785,309,70,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,4,parking spots city,2148,388,57,24,8,3,0,16,-1,0,0,0,0-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,5,INITIAL GREENFIELD AND BUILT UP SPACE,1286,589,98,30,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,6,total cycling lane length,1896,987,61,23,8,3,0,16,-1,0,0,0,0-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,7,AVERAGE LANE WIDTH,1789,894,65,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,8,M2 PER HA,1665,886,61,12,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,9,INITIAL LENGHT OF ROAD NETWORK,1898,1490,75,18,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,10,7,6,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(1845,919)|
+1,11,8,6,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(1748,911)|
+10,12,separated bike lanes per road,1887,1161,70,23,8,3,0,16,-1,0,0,0,0-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+1,13,6,12,1,0,0,0,0,192,0,-1--1--1,,1|(1901,1072)|
+10,14,parking spots per meter of road,2069,988,73,35,8,3,0,16,-1,0,0,0,0-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+1,15,4,14,1,0,0,0,0,192,0,-1--1--1,,1|(2307,733)|
+10,16,sidewalk width per road,1588,984,70,35,8,3,0,16,-1,0,0,0,0-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,17,average car lanes per road,1738,1166,72,23,8,3,0,16,-1,0,0,0,0-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,18,CYCLING LANE PER LANE,1801,1068,70,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,19,18,6,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(1864,1034)|
+10,20,total car lane length,1722,990,49,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,21,AVERAGE LANE WIDTH,2282,839,59,10,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,22,M2 PER HA,2282,839,54,10,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,23,7,20,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(1737,916)|
+1,24,8,20,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(1674,915)|
+1,25,20,17,1,0,0,0,0,192,0,-1--1--1,,1|(1722,1071)|
+11,26,0,1884,426,6,8,2,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,27,ROAD NETWORK EXPANSION RATE,1485,1510,95,30,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,28,Public space,1750,667,58,30,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,29,Built up area and greenfield,1479,669,58,30,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,30,Public space available for reallocation,1971,562,58,30,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,31,33,29,100,0,0,22,0,192,0,-1--1--1,,1|(1568,663)|
+1,32,33,28,4,0,0,22,0,192,0,-1--1--1,,1|(1652,663)|
+11,33,0,1606,663,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,34,net annual street construction,1606,689,60,18,40,3,0,0,-1,1,0,0,0,0,0,0,0,0
+1,35,37,28,100,0,0,22,0,192,0,-1--1--1,,1|(1833,663)|
+1,36,37,30,4,0,0,22,0,192,0,-1--1--1,,3|(1966,663)|(1966,663)|(1966,627)|
+11,37,0,1865,663,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,38,annual public space entering maintenance,1865,689,79,18,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,39,41,30,100,0,0,22,0,192,0,-1--1--1,,1|(1867,565)|
+1,40,41,28,4,0,0,22,0,192,0,-1--1--1,,3|(1743,565)|(1743,565)|(1743,601)|
+11,41,0,1815,565,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,42,annual public space finishing maintenance,1815,591,79,18,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,43,current distribution of public space,2152,841,67,18,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,44,INITIAL PUBLIC SPACE,1621,598,58,18,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,45,44,28,1,0,0,0,0,192,1,-1--1--1,,1|(1692,661)|
+1,46,30,42,1,0,0,0,0,192,0,-1--1--1,,1|(1889,511)|
+1,47,28,43,1,0,0,0,0,192,0,-1--1--1,,1|(1930,801)|
+1,48,28,38,1,0,0,0,0,192,0,-1--1--1,,1|(1841,647)|
+10,49,ROAD WORKS DELAY,1828,476,58,18,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,50,49,42,1,0,0,0,0,192,0,-1--1--1,,1|(1779,539)|
+10,51,INITIAL PUBLIC SPACE AVAILABLE FOR REALLOCATION,2093,484,104,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,52,51,30,1,0,0,0,0,192,1,-1--1--1,,1|(2057,522)|
+10,53,public parking spots city,1855,412,58,18,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,54,28,53,1,0,0,0,0,192,0,-1--1--1,,1|(1743,503)|
+1,55,53,4,1,0,0,0,0,192,0,-1--1--1,,1|(1958,369)|
+1,56,5,29,1,0,0,0,0,192,1,-1--1--1,,1|(1362,655)|
+10,57,AVERAGE STREET WIDTH,1439,763,70,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,58,57,34,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(1541,740)|
+10,59,ROAD,1526,595,42,22,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,60,59,34,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(1544,650)|
+10,61,M2 PER HA,1450,556,61,12,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,62,61,34,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(1488,613)|
+10,63,M2 PER HA,2944,963,54,10,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,64,8,16,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(1623,921)|
+10,65,Total length of street network,1526,1681,56,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,66,Total length of street network,1750,1399,58,30,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,67,9,66,1,0,0,0,0,64,1,-1--1--1,,1|(1793,1458)|
+12,68,48,1479,1393,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,69,71,68,100,0,0,22,0,192,0,-1--1--1,,1|(1552,1393)|
+1,70,71,66,4,0,0,22,0,192,0,-1--1--1,,1|(1652,1393)|
+11,71,0,1606,1393,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,72,net annual network expansion,1606,1424,48,23,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,73,27,72,1,0,0,0,0,64,0,-1--1--1,,1|(1528,1453)|
+1,74,66,72,1,0,0,0,0,64,0,-1--1--1,,1|(1690,1435)|
+1,75,66,14,1,0,0,0,0,192,0,-1--1--1,,1|(1944,1253)|
+1,76,66,16,1,0,0,0,0,192,0,-1--1--1,,1|(1614,1176)|
+1,77,28,16,1,0,0,0,0,192,0,-1--1--1,,1|(1632,830)|
+1,78,28,20,1,0,0,0,0,192,0,-1--1--1,,1|(1708,835)|
+1,79,28,6,1,0,0,0,0,192,0,-1--1--1,,1|(1848,810)|
+1,80,72,34,1,0,0,0,0,192,0,-1--1--1,,1|(1509,1054)|
+1,81,66,17,1,0,0,0,0,192,0,-1--1--1,,1|(1729,1269)|
+1,82,66,12,1,0,0,0,0,192,0,-1--1--1,,1|(1870,1225)|
+10,83,Time,1865,725,29,10,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,84,43,34,1,0,0,0,0,64,0,-1--1--1,,1|(1861,830)|
+10,85,COMMERCIAL CAR PARKING SPOTS CITY,2007,268,65,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,86,85,4,1,0,0,0,0,192,0,-1--1--1,,1|(2061,326)|
+10,87,DESIRED CYCLIST SPACE SHARE,2945,1024,64,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,88,DESIRED PEDESTRIAN SPACE SHARE,2842,1089,64,33,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,||B|0-166-214,0,0,0,0,0,0
+10,89,desired motorist space share,2954,1213,45,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,90,88,89,1,0,0,0,0,192,0,-1--1--1,,1|(2928,1136)|
+1,91,87,89,1,0,0,0,0,192,0,-1--1--1,,1|(3020,1118)|
+10,92,UNIT VECTOR CYCLISTS,2805,1021,83,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,93,UNIT VECTOR PEDESTRIANS,2695,1082,86,21,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,94,UNIT VECTOR MOTOR TRAFFIC,2580,1163,86,24,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,95,desired distribution of space,2439,1034,73,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,96,94,95,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(2505,1122)|
+1,97,88,95,1,0,0,0,0,192,0,-1--1--1,,1|(2673,1038)|
+1,98,93,95,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(2548,1045)|
+1,99,87,95,1,0,0,0,0,192,0,-1--1--1,,1|(2673,972)|
+1,100,92,95,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(2670,1000)|
+1,101,95,28,1,0,0,0,0,192,0,-1--1--1,,1|(1952,909)|
+1,102,95,34,1,0,0,0,0,192,0,-1--1--1,,1|(1865,920)|
+10,103,UNIT VECTOR CAR PARKING,2473,1243,84,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,104,DESIRED SHARE OF CAR SPACE USED FOR PARKING,2830,1301,104,44,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,||B|0-166-214,0,0,0,0,0,0
+1,105,103,95,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(2417,1115)|
+10,106,desired car parking space share,2589,1219,70,28,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,107,104,106,1,0,0,0,0,192,0,-1--1--1,,1|(2661,1283)|
+1,108,106,95,1,0,0,0,0,192,0,-1--1--1,,1|(2447,1130)|
+1,109,89,106,1,0,0,0,0,192,0,-1--1--1,,1|(2794,1236)|
+10,110,desired motor traffic space share,2675,1124,70,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,111,89,110,0,0,0,0,0,64,0,-1--1--1,,1|(0,0)|
+1,112,104,110,1,0,0,0,0,64,0,-1--1--1,,1|(2737,1220)|
+1,113,110,95,1,0,0,0,0,192,0,-1--1--1,,1|(2547,1103)|
+1,114,3,53,0,0,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,115,YEARS UNTIL DEMOLISHED,2391,-450,62,23,8,3,0,16,-1,0,0,0,0-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,116,CONSTRUCTION DELAY,1958,-444,69,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+11,117,0,2446,55,8,6,1,3,0,0,4,0,0,0,0,0,0,0,0,0
+10,118,EFFECT OF HOME DENSITY ON CONSTRUCTION RATE,1785,-196,89,44,8,3,0,3,-1,0,0,0,0-166-214,0-0-0,|||0-166-214,0,0,0,0,0,0
+10,119,average private parking spots per home,2211,-131,67,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,120,Residential car parking spots city,2205,32,58,30,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,121,INITIAL RESIDENTIAL PARKING SPOTS CITY,2371,171,77,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,122,121,120,1,0,0,0,1,192,1,192-192-192,|||0-0-0,1|(2238,107)|
+1,123,120,119,1,0,0,0,0,192,0,-1--1--1,,1|(2171,-60)|
+11,124,0,2068,35,6,8,2,3,0,0,1,0,0,0,0,0,0,0,0,0
+11,125,0,2377,37,6,8,2,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,126,PARKING SPOTS PER HOME CONSTRUCTED,1825,100,100,44,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,||B|0-166-214,0,0,0,0,0,0
+12,127,48,1971,32,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,128,130,127,100,0,0,22,0,192,0,-1--1--1,,1|(2034,32)|
+1,129,130,120,4,0,0,22,0,192,0,-1--1--1,,1|(2116,32)|
+11,130,0,2079,32,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,131,residential parking constructed,2079,63,70,23,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,132,126,131,1,0,0,0,0,64,0,-1--1--1,,1|(2003,99)|
+12,133,48,2420,32,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,134,136,120,100,0,0,22,0,192,0,-1--1--1,,1|(2289,32)|
+1,135,136,133,4,0,0,22,0,192,0,-1--1--1,,1|(2361,32)|
+11,136,0,2321,32,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,137,residential parking demolished,2321,73,59,33,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,138,119,137,1,0,0,0,0,64,0,-1--1--1,,1|(2272,-45)|
+10,139,Homes,2200,-370,58,30,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,140,48,1966,-372,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,141,143,140,100,0,0,22,0,192,0,-1--1--1,,1|(2029,-372)|
+1,142,143,139,4,0,0,22,0,192,0,-1--1--1,,1|(2111,-372)|
+11,143,0,2074,-372,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,144,home construction,2074,-341,48,23,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,145,48,2415,-371,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,146,148,139,100,0,0,22,0,192,0,-1--1--1,,1|(2284,-371)|
+1,147,148,145,4,0,0,22,0,192,0,-1--1--1,,1|(2356,-371)|
+11,148,0,2316,-371,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,149,home demolition,2316,-340,42,23,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,150,INITIAL HOMES,2208,-479,42,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,151,150,139,1,0,0,0,1,192,1,192-192-192,|||0-0-0,1|(2197,-436)|
+1,152,115,149,1,0,0,0,0,192,0,-1--1--1,,1|(2345,-429)|
+1,153,116,144,1,0,0,0,0,192,0,-1--1--1,,1|(2064,-386)|
+10,154,construction rate,1995,-239,48,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,155,118,154,1,0,0,0,0,192,0,-1--1--1,,1|(1897,-242)|
+10,156,home density,2599,-469,51,22,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,157,LAND AREA,2769,-516,54,22,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,158,REFERENCE HOME DENSITY,2792,-314,71,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,159,normalized home density,2622,-256,51,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,160,157,156,1,0,0,0,0,192,0,-1--1--1,,1|(2691,-478)|
+1,161,139,156,1,0,0,0,0,192,0,-1--1--1,,1|(2396,-527)|
+1,162,156,159,1,0,0,0,0,192,0,-1--1--1,,1|(2651,-368)|
+1,163,158,159,1,0,0,0,0,192,0,-1--1--1,,1|(2720,-270)|
+1,164,159,154,1,0,0,0,0,192,0,-1--1--1,,1|(2427,-175)|
+10,165,REFERENCE CONSTRUCTION RATE,1770,-337,75,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,166,165,154,1,0,0,0,0,192,0,-1--1--1,,1|(1900,-314)|
+1,167,154,144,1,0,0,0,0,192,0,-1--1--1,,1|(2003,-315)|
+1,168,139,144,1,0,0,0,0,192,0,-1--1--1,,1|(2130,-411)|
+1,169,139,149,1,0,0,0,0,192,0,-1--1--1,,1|(2233,-317)|
+1,170,144,131,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(2122,-151)|
+1,171,149,137,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(2377,-82)|
+1,172,139,119,1,0,0,0,0,192,0,-1--1--1,,1|(2255,-239)|
+1,173,120,4,1,0,0,0,0,192,0,-1--1--1,,1|(2149,209)|
+12,174,0,2581,874,200,21,8,7,0,58,-1,1,0,0,0-0-0,0-0-0,Arial|18|BU|0-0-0,0,0,256,0,0,0
+Road space reallocation policy
+12,175,0,1888,-72,200,21,8,7,0,58,-1,1,0,0,0-0-0,0-0-0,Arial|18|BU|0-0-0,0,0,256,0,0,0
+Maximum parking requirements
+12,176,0,1879,-40,190,17,8,7,0,42,-1,1,0,0,0-0-0,0-0-0,Arial|14||0-0-0,0,0,256,0,0,0
+Uncertainty in future policy: residential parking is expected to reduce, but uncertain by how much
+12,177,0,2715,912,334,27,8,7,0,42,-1,1,0,0,0-0-0,0-0-0,Arial|14||0-0-0,0,0,256,0,0,0
+Based on proposed policy, with uncertainty in the target for pedestrian space and the proportion to which cycling and pedestrian space consumes former car parking or former motor traffic space
+12,178,0,1233,256,200,21,8,7,0,58,-1,1,0,0,0-0-0,0-0-0,Arial|18|BU|0-0-0,0,0,256,0,0,0
+Public space distribution
+12,179,0,1369,305,333,33,8,7,0,42,-1,1,0,0,0-0-0,0-0-0,Arial|14||0-0-0,0,0,256,0,0,0
+Public space renews and space distribution shifts. The pace at which the distribution changes depends on the renewal rate and the difference between the desired distribution of space and the current distribution of space
+10,180,fraction of city population with bike access,2813,437,81,33,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,181,EFFECT OF BIKE UPTAKE ON RENEWAL RATE,2460,326,75,33,8,3,0,3,-1,0,0,0,0-166-214,0-0-0,|||0-166-214,0,0,0,0,0,0
+10,182,RENEWAL RATE SENSITIVITY,2334,304,74,23,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,||B|0-166-214,0,0,0,0,0,0
+10,183,renewal rate of public space,2365,482,56,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,184,REFERENCE RENEWAL RATE,2282,361,74,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,185,184,183,1,0,0,0,0,192,0,-1--1--1,,1|(2348,415)|
+1,186,181,183,1,0,0,0,0,192,0,-1--1--1,,1|(2441,404)|
+10,187,REFERENCE FRACTION OF URBAN POPULATION WITH BIKE ACCESS,2695,336,99,44,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,188,normalized fraction of city population with bike access,2518,431,84,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,189,187,188,1,0,0,0,0,192,0,-1--1--1,,1|(2626,391)|
+1,190,180,188,1,0,0,0,0,192,0,-1--1--1,,1|(2686,475)|
+1,191,188,183,1,0,0,0,0,192,0,-1--1--1,,1|(2495,477)|
+1,192,183,38,1,0,0,0,0,192,0,-1--1--1,,1|(2192,667)|
+12,193,0,1332,1592,200,21,8,7,0,58,-1,1,0,0,0-0-0,0-0-0,Arial|18|BU|0-0-0,0,0,256,0,0,0
+Road network expansion
+12,194,0,1488,1658,353,50,8,7,0,42,-1,1,0,0,0-0-0,0-0-0,Arial|14||0-0-0,0,0,256,0,0,0
+This stock and flow represents the length of the road network. The flow "net annual network expansion' is inactive in the current case study, since the length of the road network is stable. It is used for extreme conditions testing and can be applicable when the model is applied to other cities or zones where the road network is being expanded. It can also be used for behavior reproduction testing of historical behavior.
+10,195,YEAR,1707,1518,38,12,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,196,195,72,1,0,0,0,0,192,0,-1--1--1,,1|(1633,1491)|
+1,197,182,183,1,0,0,0,0,64,0,-1--1--1,,1|(2376,385)|
+10,198,car distance share,2534,674,46,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,199,PT distance share,2668,674,46,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,200,bike distance share,2797,674,50,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,201,walking distance share,2934,674,54,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,202,0,2753,668,287,42,3,7,0,43,5,1,0,0,0-166-214,0-0-0,Arial|10||0-0-0,0,0,256,0,0,0
+Modal split - distance traveled
+10,203,daily car distance,2534,715,36,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,204,203,198,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,205,total daily distance travelled,2534,715,69,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,206,205,198,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,207,daily PT distance,2668,715,36,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,208,207,199,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,209,total daily distance travelled,2668,715,69,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,210,209,199,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,211,daily cycling distance,2797,715,49,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,212,211,200,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,213,total daily distance travelled,2797,715,69,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,214,213,200,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,215,daily walking distance,2934,715,52,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,216,215,201,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,217,total daily distance travelled,2934,715,69,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,218,217,201,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Car adoption
+$-1--1--1,0,|12||-1--1--1|-1--1--1|-1--1--1|-1--1--1|-1--1--1|96,96,72,0
+12,1,0,1467,885,325,61,8,7,0,42,-1,1,0,0,0-0-0,0-0-0,Arial|14||0-0-0,0,0,256,0,0,0
+- The level of car adoption among adult population is constant |<<NnN>>|    - Changes in young adult car adoption are the driver of changes in car adoption|<<NnN>>|- Young adult car adoption occurs when young adults turn 20 years and settle|<<NnN>>|- The attractiveness of adopting a car for young adults settling increases/decreases when the level of car usage by current adults with cars increases/decreases, 
+10,2,REFERENCE DAILY CAR TRIPS PER CAR,890,159,62,29,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,3,normalized daily car trips per car,806,242,62,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,4,2,3,1,0,0,0,0,192,0,-1--1--1,,1|(832,189)|
+10,5,INITIAL POPULATION,291,708,61,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,6,Population,580,717,54,26,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,7,5,6,1,0,0,0,0,192,1,-1--1--1,,1|(408,744)|
+10,8,current car adoption status,253,607,66,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+11,9,0,662,713,6,8,2,3,0,0,1,0,0,0,0,0,0,0,0,0
+11,10,0,695,716,6,8,2,3,0,0,1,0,0,0,0,0,0,0,0,0
+11,11,0,632,604,6,8,2,3,0,0,1,0,0,0,0,0,0,0,0,0
+12,12,48,396,717,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,13,15,12,100,0,0,22,0,192,0,-1--1--1,,1|(443,717)|
+1,14,15,6,4,0,0,22,0,192,0,-1--1--1,,1|(501,717)|
+11,15,0,471,717,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,16,births,471,747,42,22,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,17,48,603,862,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,18,20,6,100,0,0,22,0,192,0,-1--1--1,,1|(603,766)|
+1,19,20,17,4,0,0,22,0,192,0,-1--1--1,,1|(603,824)|
+11,20,0,603,795,8,6,33,3,0,0,4,0,0,0,0,0,0,0,0,0
+10,21,deaths,653,795,42,22,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,22,48,551,862,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,23,25,22,100,0,0,22,0,192,0,-1--1--1,,1|(551,822)|
+1,24,25,6,4,0,0,22,0,192,0,-1--1--1,,1|(551,764)|
+11,25,0,551,792,8,6,33,3,0,0,2,0,0,0,0,0,0,0,0,0
+10,26,net migration,493,792,50,22,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,27,48,769,717,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,28,30,6,100,0,0,22,0,192,0,-1--1--1,,1|(658,717)|
+1,29,30,27,4,0,0,22,0,192,0,-1--1--1,,1|(719,717)|
+11,30,0,689,717,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,31,young adults settling,689,747,51,22,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+11,32,0,578,654,8,6,1,3,0,0,4,0,0,0,0,0,0,0,0,0
+10,33,UNIT VECTOR CAR ADOPTION CHANGE,308,325,72,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,34,6,8,1,0,0,0,0,192,0,-1--1--1,,1|(419,641)|
+10,35,car adoption status of young adults settling,506,486,68,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,36,percentage point shift in car adoption by young adults relative to adults,603,338,116,29,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,37,BIRTH RATE,312,769,57,22,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,38,OUTMIGRATION RATE,443,920,68,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,39,38,26,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(446,855)|
+1,40,37,16,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(391,773)|
+1,41,6,26,1,0,0,0,0,192,0,-1--1--1,,1|(519,755)|
+1,42,6,16,1,0,0,0,0,192,0,-1--1--1,,1|(479,775)|
+1,43,6,21,1,0,0,0,0,192,0,-1--1--1,,1|(611,781)|
+1,44,6,31,1,0,0,0,0,192,0,-1--1--1,,1|(621,769)|
+1,45,8,6,1,0,0,0,0,192,0,-1--1--1,,1|(377,688)|
+10,46,YOUTH CAR STATUS,308,818,60,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,47,46,6,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(420,815)|
+1,48,35,6,1,0,0,0,0,192,0,-1--1--1,,1|(503,589)|
+10,49,UNIT VECTOR ADULT,144,398,71,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,50,relative car adoption by adults,296,466,73,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,51,49,50,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(184,439)|
+1,52,8,50,1,0,0,0,0,192,0,-1--1--1,,1|(243,534)|
+10,53,CARS PER ADULT WITH CAR,983,644,60,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,54,normalized car adoption by adults,373,559,56,29,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,55,54,35,1,0,0,0,0,64,0,-1--1--1,,1|(441,530)|
+1,56,50,54,1,0,0,0,0,64,0,-1--1--1,,1|(309,506)|
+10,57,EFFECT OF CAR USAGE ON SHIFT IN CAR ADOPTION,432,212,83,33,8,3,0,2,-1,1,0,0,0-0-0,0-0-0,|||0-166-214,0,0,0,0,0,0
+1,58,3,36,1,0,0,0,0,192,0,-1--1--1,,1|(688,269)|
+10,59,REFERENCE SHIFT IN CAR ADOPTION,329,264,84,33,8,3,0,19,-1,1,0,0,255-255-255,0-0-0,||B|0-166-214,0,0,0,0,0,0
+1,60,59,36,1,0,0,0,0,192,0,-1--1--1,,1|(441,306)|
+1,61,57,36,1,0,0,0,0,192,0,-1--1--1,,1|(483,280)|
+10,62,REFERENCE IMMIGRATION RATE,569,951,66,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,63,DEATH RATE,771,853,52,10,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,64,63,21,1,0,0,0,1,64,0,192-192-192,|||0-0-0,1|(696,840)|
+10,65,daily car trips per car,1091,289,52,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,66,daily long distance car trips,1187,70,71,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,67,daily mid distance car trips,1019,95,71,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,68,65,3,1,0,0,0,0,192,0,-1--1--1,,1|(986,246)|
+10,69,daily car trips,1152,189,52,22,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,70,66,69,1,0,0,0,0,192,0,-1--1--1,,1|(1143,116)|
+1,71,67,69,1,0,0,0,0,192,0,-1--1--1,,1|(1068,154)|
+1,72,69,65,1,0,0,0,0,192,0,-1--1--1,,1|(1105,226)|
+10,73,YOUTH AGING TIME,858,818,57,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,74,73,31,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(749,811)|
+10,75,total population,644,1047,60,22,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,76,54,6,1,0,0,0,0,192,0,-1--1--1,,1|(469,654)|
+1,77,30,6,4,0,0,22,0,192,0,-1--1--1,,2|(689,647)|(580,647)|
+1,78,33,36,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(439,354)|
+1,79,36,35,1,0,0,0,0,192,0,-1--1--1,,1|(530,409)|
+10,80,CAR ADOPTION SENSITIVITY TO USAGE,581,199,79,35,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,||B|0-166-214,0,0,0,0,0,0
+1,81,80,36,1,0,0,0,0,192,0,-1--1--1,,1|(552,259)|
+10,82,population per zone,726,939,56,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,83,6,82,1,0,0,0,0,192,0,-1--1--1,,1|(606,838)|
+1,84,82,75,1,0,0,0,0,192,0,-1--1--1,,1|(678,991)|
+10,85,previous adults with cars,781,663,52,22,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,86,change in adults with cars,958,750,43,22,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,87,6,85,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(700,674)|
+1,88,6,86,1,0,0,0,0,192,0,-1--1--1,,1|(801,779)|
+1,89,85,86,1,0,0,0,1,64,0,192-192-192,|||0-0-0,1|(865,666)|
+10,90,Cars,1227,565,42,22,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,91,48,1074,566,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,92,94,91,100,0,0,22,0,192,0,-1--1--1,,1|(1117,566)|
+1,93,94,90,4,0,0,22,0,192,0,-1--1--1,,1|(1166,566)|
+11,94,0,1142,566,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,95,net change in cars,1142,597,54,23,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,96,86,95,1,0,0,0,0,192,0,-1--1--1,,1|(1030,710)|
+10,97,INITIAL CARS,1175,666,42,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,98,97,90,1,0,0,0,0,192,1,-1--1--1,,1|(1217,624)|
+1,99,53,95,1,0,0,0,0,192,0,-1--1--1,,1|(1071,633)|
+1,100,90,65,1,0,0,0,0,192,0,-1--1--1,,1|(1212,438)|
+12,101,0,355,58,200,21,8,7,0,58,-1,1,0,0,0-0-0,0-0-0,Arial|18|BU|0-0-0,0,0,256,0,0,0
+Changes in car adoption
+12,102,0,406,101,252,23,8,7,0,42,-1,1,0,0,0-0-0,0-0-0,Arial|14||0-0-0,0,0,256,0,0,0
+A shift in car adoption rates is expected among young adults. It is uncertain how fast car adoption rate may change. 
+12,103,0,1341,815,200,21,8,7,0,58,-1,1,0,0,0-0-0,0-0-0,Arial|18|BU|0-0-0,0,0,256,0,0,0
+Assumptions
+10,104,population density,821,908,62,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,105,REFERENCE POPULATION DENSITY,925,1135,79,27,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,106,normalized population density,706,1147,70,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,107,104,106,1,0,0,0,0,192,0,-1--1--1,,1|(837,1026)|
+1,108,105,106,1,0,0,0,0,192,0,-1--1--1,,1|(840,1174)|
+1,109,6,104,1,0,0,0,0,192,0,-1--1--1,,1|(710,791)|
+10,110,LAND AREA,953,1008,57,10,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,111,110,104,0,0,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,112,immigration rate,376,1030,61,22,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,113,106,112,1,0,0,0,0,192,0,-1--1--1,,1|(446,1143)|
+1,114,62,112,1,0,0,0,0,192,0,-1--1--1,,1|(475,1024)|
+1,115,112,26,1,0,0,0,0,192,0,-1--1--1,,1|(372,947)|
+10,116,EFFECT OF POPULATION DENSITY ON IMMIGRATION RATE,317,1173,108,30,8,3,0,3,-1,0,0,0,0-166-214,0-0-0,|||0-166-214,0,0,0,0,0,0
+1,117,116,112,1,0,0,0,0,192,0,-1--1--1,,1|(305,1104)|
+10,118,YEAR,848,589,38,12,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,119,118,86,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(912,660)|
+1,120,118,85,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(793,613)|
+10,121,car distance share,1439,381,46,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,122,PT distance share,1573,381,46,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,123,bike distance share,1702,381,50,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,124,walking distance share,1839,381,54,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,125,0,1658,375,287,42,3,7,0,43,5,1,0,0,0-166-214,0-0-0,Arial|10||0-0-0,0,0,256,0,0,0
+Modal split - distance traveled
+10,126,daily car distance,1439,422,36,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,127,126,121,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,128,total daily distance travelled,1439,422,69,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,129,128,121,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,130,daily PT distance,1573,422,36,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,131,130,122,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,132,total daily distance travelled,1573,422,69,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,133,132,122,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,134,daily cycling distance,1702,422,49,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,135,134,123,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,136,total daily distance travelled,1702,422,69,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,137,136,123,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,138,daily walking distance,1839,422,52,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,139,138,124,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,140,total daily distance travelled,1839,422,69,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,141,140,124,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Bike adoption
+$-1--1--1,0,|12||-1--1--1|-1--1--1|-1--1--1|-1--1--1|-1--1--1|96,96,73,0
+12,1,0,1451,1238,448,90,8,7,0,42,-1,1,0,0,0-0-0,0-0-0,Arial|14||0-0-0,0,0,256,0,0,0
+- Diffusion of Innovation models are applicable to bike adoption|<<NnN>>|- the fruitfulness of mouth-to-mouth contacts increases when the level of bike usage among bike users increases and when parking availability increases|<<NnN>>|- the population receptive to adopting cycling increases when the cycling network becomes more complete|<<NnN>>|- only bike parking in the city is a limiting factor|<<NnN>>|- population changes do not directly affect the number of bike users in the city|<<NnN>>|- joining a bikesharing service is a faster decision compared to adopting a private bike|<<NnN>>|- loyal bikesharing users eventually upgrade to private bikes
+10,2,UPGRADE TIME,1523,835,46,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,3,BIKE DISCONTINUATION FRACTION,1167,1027,91,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,4,BIKESHARING TO PRIVATE BIKE UPGRADE FRACTION,1457,897,120,44,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,||B|0-166-214,0,0,0,0,0,0
+10,5,EFFECT OF PARKING AVAILABILITY ON CONTACT FRUITFULNESS,465,514,98,40,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,|||77-215-255,0,0,0,0,0,0
+10,6,EFFECT OF BIKE USAGE ON CONTACT FRUITFULNESS,426,576,81,35,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,|||77-215-255,0,0,0,0,0,0
+10,7,daily mid distance cycling trips,-77,1024,54,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,8,daily bike trips per user,86,1032,56,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,9,7,8,1,0,0,0,0,192,0,-1--1--1,,1|(-17,993)|
+10,10,REFERENCE BIKE TRIPS PER USER,281,984,71,46,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,11,Public space,68,181,56,10,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,12,BIKE ADOPTION SENSITIVITY TO PARKING,521,443,79,35,8,3,0,18,-1,1,0,0,0-0-0,0-0-0,||B|0-166-214,0,0,0,0,0,0
+10,13,normalized daily bike trips per user,437,1065,69,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,14,10,13,1,0,0,0,0,192,0,-1--1--1,,1|(360,971)|
+1,15,8,13,1,0,0,0,0,192,0,-1--1--1,,1|(253,1073)|
+10,16,Population,548,801,48,10,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,17,EARLY EFFECT OF BIKE NETWORK COMPLETION ON POPULATION SUSCEPTIBLE TO CYCLING,-56,565,143,44,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,|||77-215-255,0,0,0,0,0,0
+11,18,0,-436,1272,6,8,2,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,19,previous space for cyclists,126,297,49,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,20,11,19,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(81,248)|
+10,21,change in space for cyclists,275,265,61,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,22,19,21,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(219,302)|
+1,23,11,21,1,0,0,0,0,192,0,-1--1--1,,1|(162,237)|
+11,24,0,-424,282,6,8,2,3,0,0,1,0,0,0,0,0,0,0,0,0
+11,25,0,841,729,6,8,2,3,0,0,1,0,0,0,0,0,0,0,0,0
+11,26,0,1109,729,6,8,2,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,27,INITIAL BIKE USERS,1070,566,59,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+11,28,0,977,803,8,6,1,3,0,0,4,0,0,0,0,0,0,0,0,0
+11,29,0,1060,630,6,8,2,3,0,0,1,0,0,0,0,0,0,0,0,0
+11,30,0,1250,599,6,8,2,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,31,Bike users,1150,727,54,26,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,32,48,1389,727,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,33,35,31,100,0,0,22,0,192,0,-1--1--1,,1|(1243,727)|
+1,34,35,32,4,0,0,22,0,192,0,-1--1--1,,1|(1329,727)|
+11,35,0,1289,727,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,36,bikesharing users upgrading to private bikes,1289,768,66,33,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,37,35,31,4,0,0,22,0,192,0,-1--1--1,,2|(1289,631)|(1150,631)|
+12,38,48,925,729,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,39,41,38,100,0,0,22,0,192,0,-1--1--1,,1|(983,729)|
+1,40,41,31,4,0,0,22,0,192,0,-1--1--1,,1|(1062,729)|
+11,41,0,1023,729,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,42,people adopting bikes,1023,760,62,23,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,43,48,1150,916,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,44,46,31,100,0,0,22,0,192,0,-1--1--1,,1|(1150,789)|
+1,45,46,43,4,0,0,22,0,192,0,-1--1--1,,1|(1150,869)|
+11,46,0,1150,832,8,6,33,3,0,0,4,0,0,0,0,0,0,0,0,0
+10,47,bike users discontinuing,1209,832,51,23,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,48,2,36,1,0,0,0,0,192,0,-1--1--1,,1|(1403,759)|
+10,49,PERIOD OF USE,1277,962,73,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,50,27,31,1,0,0,0,0,192,1,-1--1--1,,1|(1066,653)|
+1,51,4,36,1,0,0,0,0,192,0,-1--1--1,,1|(1426,844)|
+1,52,31,36,1,0,0,0,0,192,0,-1--1--1,,1|(1184,778)|
+1,53,49,47,1,0,0,0,0,192,0,-1--1--1,,1|(1270,898)|
+1,54,31,47,1,0,0,0,0,192,0,-1--1--1,,1|(1105,813)|
+1,55,3,47,1,0,0,0,0,192,0,-1--1--1,,1|(1199,954)|
+10,56,UNIT VECTOR USER TYPE CHANGE,1169,520,65,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,57,56,31,1,0,0,0,0,192,0,-1--1--1,,1|(1107,643)|
+10,58,DECISION TIME BIKE ADOPTION,952,608,73,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,59,fraction of population with bike access in each zone,733,766,83,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,60,16,59,1,0,0,0,0,192,0,-1--1--1,,1|(634,814)|
+10,61,potential adoption rate,815,672,55,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,62,contact fruitfulness,794,596,43,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,63,59,61,1,0,0,0,0,192,0,-1--1--1,,1|(723,711)|
+10,64,fraction of population receptive to cycling and without bike access,592,677,83,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,65,59,64,1,0,0,0,0,192,0,-1--1--1,,1|(616,753)|
+1,66,64,61,1,0,0,0,0,192,0,-1--1--1,,1|(718,653)|
+1,67,61,42,1,0,0,0,0,192,0,-1--1--1,,1|(936,690)|
+1,68,62,42,1,0,0,0,0,192,0,-1--1--1,,1|(1005,699)|
+1,69,31,42,1,0,0,0,0,192,0,-1--1--1,,1|(1055,803)|
+1,70,58,42,1,0,0,0,0,192,0,-1--1--1,,1|(1013,672)|
+10,71,REFERENCE CONTACT FRUITFULNESS,698,518,70,25,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,72,12,62,1,0,0,0,0,192,0,-1--1--1,,1|(624,529)|
+1,73,6,62,1,0,0,0,0,192,0,-1--1--1,,1|(619,607)|
+1,74,5,62,1,0,0,0,0,192,0,-1--1--1,,1|(637,573)|
+1,75,71,62,1,0,0,0,0,192,0,-1--1--1,,1|(724,558)|
+10,76,actual relative to desired bike parking per user,705,447,62,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,77,Bike parking,670,252,48,22,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,78,48,487,254,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,79,81,78,100,0,0,22,0,192,0,-1--1--1,,1|(536,254)|
+1,80,81,77,4,0,0,22,0,192,0,-1--1--1,,1|(597,254)|
+11,81,0,567,254,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,82,bike parking added,567,285,47,23,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,83,INITIAL BIKE PARKING,749,135,59,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,84,BIKE PARKING PER SPACE FOR CYCLISTS ADDED,407,141,87,33,8,3,0,16,-1,0,0,0,0-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+1,85,84,82,1,0,0,0,0,192,0,-1--1--1,,1|(437,189)|
+1,86,83,77,1,0,0,0,0,192,1,-1--1--1,,1|(660,169)|
+10,87,desired bike parking per user,872,451,62,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,88,87,76,1,0,0,0,0,192,0,-1--1--1,,1|(792,420)|
+1,89,76,62,1,0,0,0,0,192,0,-1--1--1,,1|(774,469)|
+1,90,13,62,1,0,0,0,0,192,0,-1--1--1,,1|(782,824)|
+10,91,bike parking per user,679,347,62,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,92,77,91,0,0,0,0,0,64,0,-1--1--1,,1|(0,0)|
+1,93,31,91,1,0,0,0,0,64,0,-1--1--1,,1|(992,452)|
+1,94,91,76,1,0,0,0,0,192,0,-1--1--1,,1|(642,401)|
+10,95,fraction of population receptive to cycling,348,649,71,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,96,17,95,1,0,0,0,0,192,0,-1--1--1,,1|(133,652)|
+1,97,95,64,1,0,0,0,0,192,0,-1--1--1,,1|(462,694)|
+10,98,CONTACT RATE,848,759,54,23,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,||B|0-166-214,0,0,0,0,0,0
+1,99,98,61,1,0,0,0,0,192,0,-1--1--1,,1|(807,720)|
+1,100,31,8,1,0,0,0,0,192,0,-1--1--1,,1|(926,1057)|
+1,101,21,82,1,0,0,0,0,192,0,-1--1--1,,1|(408,294)|
+10,102,early,221,592,42,22,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,103,LATE EFFECT OF BIKE NETWORK COMPLETION ON POPULATION SUSCEPTIBLE TO CYCLING,-73,642,122,44,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,|||77-215-255,0,0,0,0,0,0
+1,104,103,95,1,0,0,0,0,192,0,-1--1--1,,1|(181,704)|
+1,105,102,95,1,0,0,0,0,192,0,-1--1--1,,1|(255,626)|
+10,106,TIPPING POINT SWITCH,131,583,69,23,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,||B|0-166-214,0,0,0,0,0,0
+1,107,106,95,1,0,0,0,0,192,0,-1--1--1,,1|(196,624)|
+12,108,0,1204,1134,200,21,8,7,0,58,-1,1,0,0,0-0-0,0-0-0,Arial|18|BU|0-0-0,0,0,256,0,0,0
+Assumptions
+12,109,0,-95,388,200,21,8,7,0,58,-1,1,0,0,0-0-0,0-0-0,Arial|18|BU|0-0-0,0,0,256,0,0,0
+Tipping point
+12,110,0,29,442,324,37,8,7,0,42,-1,1,0,0,0-0-0,0-0-0,Arial|14||0-0-0,0,0,256,0,0,0
+We know there is a cautious majority that will become more receptive to cycling as the cycling network becomes safer and better connected. It is however uncertain how soon that tipping point occurs, and how fast bike use will spread across the fraction of the population receptive to cycling.
+10,111,fraction of city population with bike access,904,893,83,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,112,31,59,1,0,0,0,0,192,0,-1--1--1,,1|(883,833)|
+10,113,BIKE ADOPTION SENSITIVITY TO USAGE,483,636,79,35,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,||B|0-166-214,0,0,0,0,0,0
+1,114,113,62,1,0,0,0,0,192,0,-1--1--1,,1|(674,643)|
+10,115,REFERENCE FRACTION OF POPULATION RECEPTIVE TO CYCLING,264,512,85,31,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,116,106,115,1,0,0,0,0,192,0,-1--1--1,,1|(151,541)|
+1,117,102,115,1,0,0,0,0,192,0,-1--1--1,,1|(262,536)|
+1,118,115,95,1,0,0,0,0,192,0,-1--1--1,,1|(318,571)|
+10,119,REFERENCE BIKE NETWORK COMPLETION,323,857,72,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,120,change in bike network completion,336,721,55,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,121,119,120,1,0,0,0,0,192,0,-1--1--1,,1|(300,792)|
+1,122,120,95,1,0,0,0,0,192,0,-1--1--1,,1|(396,710)|
+10,123,NUMBER OF LANES PER ROAD FOR BIKE NETWORK COMPLETION,52,766,93,44,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,124,separated bike lanes per road,53,895,61,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,125,bike network completion,190,812,50,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,126,124,125,1,0,0,0,0,192,0,-1--1--1,,1|(79,840)|
+1,127,123,125,1,0,0,0,0,192,0,-1--1--1,,1|(184,769)|
+1,128,125,120,1,0,0,0,0,192,0,-1--1--1,,1|(245,740)|
+10,129,YEAR,298,357,38,12,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,130,129,19,1,0,0,0,0,192,0,-1--1--1,,1|(203,339)|
+1,131,129,21,1,0,0,0,0,192,0,-1--1--1,,1|(286,324)|
+10,132,car distance share,1017,295,46,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,133,PT distance share,1151,295,46,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,134,bike distance share,1280,295,50,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,135,walking distance share,1417,295,54,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,136,0,1236,289,287,42,3,7,0,43,5,1,0,0,0-166-214,0-0-0,Arial|10||0-0-0,0,0,256,0,0,0
+Modal split - distance traveled
+10,137,daily car distance,2013,633,36,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,138,137,132,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,139,total daily distance travelled,2013,633,69,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,140,139,132,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,141,daily PT distance,2147,633,36,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,142,141,133,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,143,total daily distance travelled,2147,633,69,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,144,143,133,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,145,daily cycling distance,2276,633,49,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,146,145,134,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,147,total daily distance travelled,2276,633,69,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,148,147,134,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,149,daily walking distance,2413,633,52,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,150,149,135,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,151,total daily distance travelled,2413,633,69,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,152,151,135,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+1,153,59,111,1,0,0,0,0,192,0,-1--1--1,,1|(746,861)|
+10,154,fraction of ring population with bike access,641,898,59,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,155,59,154,1,0,0,0,0,192,0,-1--1--1,,1|(718,855)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Mode choice
+$-1--1--1,0,|12||-1--1--1|-1--1--1|-1--1--1|-1--1--1|-1--1--1|96,96,77,0
+10,1,mid distance PT share,1346,544,50,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,2,mid distance bike share,1346,700,54,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,3,daily mid distance PT trips,1676,544,69,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,4,daily mid distance cycling trips,1676,700,69,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,5,2,4,1,0,0,0,0,192,0,-1--1--1,,1|(1488,666)|
+1,6,1,3,1,0,0,0,0,192,0,-1--1--1,,1|(1488,508)|
+10,7,daily mid distance car trips,1676,624,69,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,8,EFFECT OF BIKE LANES PER ROAD ON SUBJECTIVE VALUE OF CYCLING TIME,580,1529,104,44,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,|||0-166-214,0,0,0,0,0,0
+10,9,separated bike lanes per road,886,1474,58,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,10,REFERENCE PARKING SPOTS PER METER OF ROAD NETWORK,434,1622,78,44,8,3,0,2,-1,0,0,0,0-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,11,EFFECT OF PARKING SPOTS PER METER ON SUBJECTIVE VALUE OF CYCLING TIME,307,1404,116,38,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,|||0-166-214,0,0,0,0,0,0
+10,12,daily mid distance trips,1937,596,61,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,13,12,7,1,0,0,0,0,192,0,-1--1--1,,1|(1812,655)|
+1,14,12,4,1,0,0,0,0,192,0,-1--1--1,,1|(1830,705)|
+1,15,12,3,1,0,0,0,0,192,0,-1--1--1,,1|(1792,591)|
+10,16,EFFECT OF CAR LANES PER ROAD ON SUBJECTIVE VALUE OF CYCLING TIME,316,1213,110,44,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,|||0-166-214,0,0,0,0,0,0
+10,17,REFERENCE CAR LANES PER ROAD,120,1417,87,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,18,REFERENCE BIKE LANES PER ROAD,934,1359,55,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,19,REFERENCE SUBJECTIVE COST FACTOR,586,983,84,33,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,20,added subjective cost of cycling time due to infrastructure,624,1305,83,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,21,8,20,1,0,0,0,0,192,0,-1--1--1,,1|(577,1439)|
+1,22,11,20,1,0,0,0,0,192,0,-1--1--1,,1|(433,1320)|
+1,23,16,20,1,0,0,0,0,192,0,-1--1--1,,1|(501,1229)|
+10,24,parking spots per meter of road,354,1552,72,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,25,average car lanes per road,11,1333,60,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,26,cycling network to euclidian distance ratio,-507,1194,100,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,27,EFFECT OF BIKE LANES PER ROAD ON NETWORK TO EUCLIDIAN DISTANCE RATIO,-751,1303,123,47,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,|||0-166-214,0,0,0,0,0,0
+10,28,bike users bike share on mid distance trips,1018,785,57,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,29,bike users PT share on mid distance trips,1018,698,61,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,30,28,2,1,0,0,0,0,192,0,-1--1--1,,1|(1159,786)|
+1,31,29,1,1,0,0,0,0,192,0,-1--1--1,,1|(1153,709)|
+10,32,peak PT riders per hour,415,-390,68,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,33,standing capacity,-264,-251,81,23,8,3,0,2,-1,0,0,0,0-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,34,seat capacity,-197,-455,70,28,8,3,0,2,-1,0,0,0,0-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,35,overcrowding level,-83,-267,53,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,36,overcrowding multiplier,-14,-147,53,23,8,3,0,16,-1,0,0,0,0-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+1,37,34,35,1,0,0,0,0,192,0,-1--1--1,,1|(-121,-354)|
+1,38,33,35,1,0,0,0,0,192,0,-1--1--1,,1|(-153,-282)|
+1,39,32,35,1,0,0,0,0,192,0,-1--1--1,,1|(205,-365)|
+1,40,35,36,1,0,0,0,0,192,0,-1--1--1,,1|(-32,-185)|
+10,41,PERSONS PER TRIP,318,-522,60,20,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,42,41,32,1,0,0,0,0,192,0,-1--1--1,,1|(327,-459)|
+10,43,daily PT trips,1011,-276,52,22,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,44,43,32,1,0,0,0,0,192,0,-1--1--1,,1|(733,-365)|
+10,45,long distance PT share,1311,353,70,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,46,EFFECT OF PARKING SPOTS ON PARKING SEARCH AND EGRESS TIME TO CITY,-892,295,117,29,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,|||0-166-214,0,0,0,0,0,0
+10,47,PT access egress time,-589,-159,71,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,48,long distance car share,1311,281,56,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,49,daily long distance trips,1937,323,51,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,50,daily long distance PT trips,1641,356,51,22,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,51,daily long distance car trips,1641,269,51,22,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,52,49,50,1,0,0,0,0,192,0,-1--1--1,,1|(1814,371)|
+1,53,49,51,1,0,0,0,0,192,0,-1--1--1,,1|(1786,320)|
+1,54,45,50,1,0,0,0,0,192,0,-1--1--1,,1|(1482,312)|
+1,55,48,51,1,0,0,0,0,192,0,-1--1--1,,1|(1475,230)|
+10,56,PERCEPTION TIME,231,655,73,33,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,||B|0-166-214,0,0,0,0,0,0
+10,57,car users PT share on long distance trips,1018,358,71,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,58,car users car share on long distance trips,1018,266,71,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,59,58,48,1,0,0,0,0,192,0,-1--1--1,,1|(1126,237)|
+1,60,57,45,1,0,0,0,0,192,0,-1--1--1,,1|(1137,320)|
+10,61,REFERENCE PT ACCESS EGRESS TIME,-987,-252,78,32,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,62,EFFECT OF SIDEWALK WIDTH ON PT ACCESS EGRESS TIME,-902,-315,117,42,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,|||0-166-214,0,0,0,0,0,0
+10,63,sidewalk width per road,-1201,-191,70,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,64,62,47,1,0,0,0,0,192,0,-1--1--1,,1|(-719,-269)|
+1,65,61,47,1,0,0,0,0,192,0,-1--1--1,,1|(-771,-235)|
+11,66,0,4173,1192,6,8,2,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,67,total car lane length,1839,1198,52,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,68,REFERENCE SEARCH AND EGRESS TIME,-873,369,78,44,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,69,average parking search and out vehicle time,-602,395,69,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,70,68,69,1,0,0,0,0,192,0,-1--1--1,,1|(-726,343)|
+10,71,AVERAGE SPEED LIMIT,-713,850,52,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,72,peak network density,-1035,779,46,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,73,congested speed,-701,744,54,23,8,3,0,16,-1,0,0,0,0-0-0,0-0-0,|||0-0-0,0,0,0,0,0,0
+10,74,peak cars per hour,-1345,870,57,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,75,74,72,1,0,0,0,0,192,0,-1--1--1,,1|(-1197,775)|
+10,76,COLLISION DENSITY,-1079,868,62,22,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,77,76,73,1,0,0,0,0,192,0,-1--1--1,,1|(-878,792)|
+1,78,71,73,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+1,79,72,73,1,0,0,0,0,64,0,-1--1--1,,1|(-833,735)|
+10,80,CAR OCCUPANCY RATE,-1378,767,60,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,81,80,74,1,0,0,0,0,192,0,-1--1--1,,1|(-1375,823)|
+10,82,total car lane length,-1151,698,54,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,83,82,72,1,0,0,0,0,192,0,-1--1--1,,1|(-1075,738)|
+1,84,46,69,1,0,0,0,0,64,0,-1--1--1,,1|(-728,312)|
+10,85,average cycling speed,-403,1438,59,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,86,PEDAL BIKE SPEED,-532,1512,82,26,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,87,EBIKE SPEED,-390,1565,70,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,88,87,85,1,0,0,0,0,192,0,-1--1--1,,1|(-407,1505)|
+1,89,86,85,0,0,0,0,0,192,0,-1--1--1,,1|(0,0)|
+10,90,REFERENCE SIDEWALK WIDTH PER ROAD,-1145,-123,76,32,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,91,76,72,1,0,0,0,0,192,0,-1--1--1,,1|(-1073,823)|
+10,92,WALKING SPEED,-850,899,51,19,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,93,92,73,1,0,0,0,0,64,0,-1--1--1,,1|(-779,811)|
+10,94,subjective parking search and out vehicle time,-200,475,69,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,95,69,94,1,0,0,0,0,64,0,-1--1--1,,1|(-423,470)|
+10,96,REFERENCE NETWORK TO EUCLIDIAN DISTANCE RATIO,-757,1128,111,41,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,97,27,26,1,0,0,0,0,192,0,-1--1--1,,1|(-681,1230)|
+1,98,96,26,1,0,0,0,0,192,0,-1--1--1,,1|(-593,1138)|
+10,99,MINUTES PER HOUR,-274,1111,56,18,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,100,car users PT share on mid distance trips,1018,445,71,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,101,car users car share on mid distance trips,1018,527,71,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,102,mid distance car share,1346,624,49,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,103,102,7,1,0,0,0,0,192,0,-1--1--1,,1|(1482,590)|
+10,104,fraction of city population with only PT access on mid distance trips,1196,657,80,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,105,104,2,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(1273,709)|
+1,106,104,1,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(1292,636)|
+1,107,104,102,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(1282,667)|
+1,108,101,102,1,0,0,0,0,192,0,-1--1--1,,1|(1163,502)|
+1,109,100,1,1,0,0,0,0,192,0,-1--1--1,,1|(1170,447)|
+10,110,subjective PT access egress time,-118,-94,71,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,111,47,110,1,0,0,0,0,192,0,-1--1--1,,1|(-387,-182)|
+10,112,beta 8,800,289,42,22,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,113,beta 5,800,611,42,22,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,114,112,58,1,0,0,0,0,192,0,-1--1--1,,1|(857,254)|
+1,115,112,57,1,0,0,0,0,192,0,-1--1--1,,1|(847,326)|
+1,116,113,100,1,0,0,0,0,192,0,-1--1--1,,1|(816,551)|
+1,117,113,101,1,0,0,0,0,192,0,-1--1--1,,1|(858,569)|
+1,118,113,29,1,0,0,0,0,192,0,-1--1--1,,1|(804,660)|
+1,119,113,28,1,0,0,0,0,192,0,-1--1--1,,1|(850,762)|
+10,120,normalized empty city parking spots per daily car trip,-1031,387,68,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,121,120,69,1,0,0,0,0,192,0,-1--1--1,,1|(-763,424)|
+10,122,change in car lanes per road,345,1278,56,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,123,change in parking spots per meter,486,1422,72,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,124,change in bike lanes per road,712,1436,60,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,125,25,122,1,0,0,0,0,192,0,-1--1--1,,1|(126,1293)|
+1,126,17,122,1,0,0,0,0,192,0,-1--1--1,,1|(224,1331)|
+1,127,122,20,1,0,0,0,0,192,0,-1--1--1,,1|(469,1275)|
+1,128,24,123,1,0,0,0,0,192,0,-1--1--1,,1|(375,1468)|
+1,129,10,123,1,0,0,0,0,192,0,-1--1--1,,1|(444,1495)|
+1,130,123,20,1,0,0,0,0,192,0,-1--1--1,,1|(538,1349)|
+1,131,9,124,1,0,0,0,0,192,0,-1--1--1,,1|(774,1480)|
+1,132,18,124,1,0,0,0,0,192,0,-1--1--1,,1|(823,1436)|
+1,133,124,20,1,0,0,0,0,192,0,-1--1--1,,1|(661,1369)|
+10,134,CYCLING NETWORK DISTANCE SENSITIVITY,-529,1318,103,39,8,3,0,18,-1,1,0,0,0-0-0,0-0-0,||B|0-166-214,0,0,0,0,0,0
+1,135,134,26,1,0,0,0,0,192,0,-1--1--1,,1|(-541,1257)|
+10,136,change in bike lanes per road,-772,1206,66,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,137,136,26,1,0,0,0,0,192,0,-1--1--1,,1|(-646,1179)|
+10,138,SENSITIVITY TO SIDEWALK DATA UNCERTAINTY,-690,-312,82,35,8,3,0,18,-1,1,0,0,0-0-0,0-0-0,||B|0-166-214,0,0,0,0,0,0
+10,139,normalized sidewalk width per road,-961,-180,73,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,140,90,139,1,0,0,0,0,192,0,-1--1--1,,1|(-1071,-173)|
+1,141,63,139,1,0,0,0,0,192,0,-1--1--1,,1|(-1081,-215)|
+1,142,139,47,1,0,0,0,0,192,0,-1--1--1,,1|(-779,-209)|
+1,143,138,47,1,0,0,0,0,192,0,-1--1--1,,1|(-623,-252)|
+10,144,PARKING SEARCH AND EGRESS SENSITIVITY,-673,271,101,20,8,3,0,18,-1,1,0,0,0-0-0,0-0-0,||B|0-166-214,0,0,0,0,0,0
+1,145,144,69,1,0,0,0,0,192,0,-1--1--1,,1|(-635,321)|
+10,146,ebike share,-975,1472,42,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,147,146,85,1,0,0,0,0,192,0,-1--1--1,,1|(-669,1409)|
+10,148,subjective cost of cycling time,401,1033,83,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,149,19,148,1,0,0,0,0,192,0,-1--1--1,,1|(526,975)|
+1,150,20,148,1,0,0,0,0,192,0,-1--1--1,,1|(521,1135)|
+10,151,SUBJECTIVE CYCLING TIME SENSITIVITY,192,1048,68,33,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,||B|0-166-214,0,0,0,0,0,0
+1,152,151,148,1,0,0,0,0,192,0,-1--1--1,,1|(279,1069)|
+10,153,fraction of city population with car access,1502,809,73,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,154,Population,1569,926,53,12,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,155,154,153,1,0,0,0,0,192,0,-1--1--1,,1|(1559,882)|
+1,156,153,2,1,0,0,0,0,192,0,-1--1--1,,1|(1495,710)|
+1,157,153,102,1,0,0,0,0,192,0,-1--1--1,,1|(1440,606)|
+1,158,153,1,1,0,0,0,0,192,0,-1--1--1,,1|(1440,553)|
+1,159,153,104,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(1405,829)|
+10,160,fraction of population with bike access in each zone,1176,1371,72,27,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,161,Population,2164,848,48,10,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,162,PT capacity,-466,-447,61,33,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,163,48,-708,-445,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,164,166,163,100,0,0,22,0,192,0,-1--1--1,,1|(-648,-445)|
+1,165,166,162,4,0,0,22,0,192,0,-1--1--1,,1|(-564,-445)|
+11,166,0,-608,-445,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,167,net added capacity per year,-608,-414,72,23,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,168,NET ADDED PT CAPACITY PER YEAR,-528,-299,69,33,8,3,0,19,-1,0,0,0,0-166-214,0-0-0,||B|0-166-214,0,0,0,0,0,0
+1,169,168,167,1,0,0,0,0,192,0,-1--1--1,,1|(-528,-354)|
+1,170,162,167,1,0,0,0,0,192,0,-1--1--1,,1|(-574,-513)|
+10,171,SEAT CAPACITY TO TOTAL CAPACITY RATIO,-301,-370,80,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,172,INITIAL PT CAPACITY,-519,-562,49,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,173,172,162,1,0,0,0,0,192,1,-1--1--1,,1|(-461,-520)|
+1,174,171,34,1,0,0,0,0,192,0,-1--1--1,,1|(-279,-437)|
+1,175,171,33,1,0,0,0,0,192,0,-1--1--1,,1|(-305,-318)|
+1,176,162,33,1,0,0,0,0,192,0,-1--1--1,,1|(-387,-327)|
+1,177,162,34,1,0,0,0,0,192,0,-1--1--1,,1|(-327,-478)|
+10,178,Time,-821,391,29,10,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,179,change in car lanes per road,-524,753,60,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,180,EFFECT OF CAR LANES PER ROAD ON NETWORK TO EUCLIDIAN DISTANCE RATIO,-467,844,125,33,8,3,0,2,-1,0,0,0,0-0-0,0-0-0,|||0-166-214,0,0,0,0,0,0
+10,181,car network to euclidian distance ratio,-328,722,67,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,182,180,181,1,0,0,0,0,192,0,-1--1--1,,1|(-375,790)|
+1,183,179,181,1,0,0,0,0,192,0,-1--1--1,,1|(-427,767)|
+10,184,CAR PARKING SEARCH AND OUT VEHICLE STT LOOKUP,-293,364,125,33,8,3,0,2,-1,0,0,0,0-0-0,0-0-0,|||0-166-214,0,0,0,0,0,0
+10,185,PT ACCESS EGRESS STT LOOKUP,-415,-125,57,33,8,3,0,2,-1,0,0,0,0-0-0,0-0-0,|||0-166-214,0,0,0,0,0,0
+10,186,CYCLING PARKING TIME,-357,1209,68,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,187,185,110,1,0,0,0,0,192,0,-1--1--1,,1|(-254,-126)|
+10,188,parking spots city,-1564,361,58,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,189,REFERENCE EMPTY CITY PARKING SPOTS PER DAILY CAR TRIP,-1210,312,80,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,190,189,120,1,0,0,0,0,192,0,-1--1--1,,1|(-1141,359)|
+10,191,Cars,3661,70,28,10,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,192,UNIT VECTOR LONG DISTANCE,2085,235,80,20,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,193,daily trips in each trip distance band,1781,414,87,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,194,193,49,1,0,0,0,0,192,0,-1--1--1,,1|(1831,374)|
+1,195,193,12,1,0,0,0,0,192,0,-1--1--1,,1|(1827,492)|
+1,196,192,49,1,0,0,0,0,192,0,-1--1--1,,1|(2002,255)|
+10,197,population fraction with car access on long distance trips,1155,165,78,33,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,198,197,48,1,0,0,0,0,192,0,-1--1--1,,1|(1259,200)|
+1,199,197,45,1,0,0,0,0,192,0,-1--1--1,,1|(1290,184)|
+1,200,184,94,1,0,0,0,0,192,0,-1--1--1,,1|(-240,451)|
+10,201,fraction of city population with bike access,1155,897,81,33,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,202,201,2,1,0,0,0,0,192,0,-1--1--1,,1|(1288,848)|
+1,203,201,102,1,0,0,0,0,192,0,-1--1--1,,1|(1262,838)|
+1,204,201,1,1,0,0,0,0,192,0,-1--1--1,,1|(1249,822)|
+1,205,201,104,1,0,0,0,0,192,0,-1--1--1,,1|(1193,837)|
+10,206,Smoothed subjective travel time by PT,506,205,61,33,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,207,Smoothed subjective travel time by car,506,486,61,33,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,208,Smoothed subjective travel time by bike,506,798,61,33,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,209,48,238,489,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,210,212,209,100,0,0,22,0,192,0,-1--1--1,,1|(305,489)|
+1,211,212,207,4,0,0,22,0,192,0,-1--1--1,,1|(402,489)|
+11,212,0,354,489,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,213,change in subjective travel time by car,354,530,61,33,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,214,48,233,207,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,215,217,214,100,0,0,22,0,192,0,-1--1--1,,1|(301,207)|
+1,216,217,206,4,0,0,22,0,192,0,-1--1--1,,1|(401,207)|
+11,217,0,351,207,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,218,change in subjective travel time by PT,351,248,61,33,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,219,48,234,806,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,220,222,219,100,0,0,22,0,192,0,-1--1--1,,1|(302,806)|
+1,221,222,208,4,0,0,22,0,192,0,-1--1--1,,1|(401,806)|
+11,222,0,352,806,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,223,change in subjective travel time by bike,352,847,61,33,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,224,INITIAL SUBJECTIVE TRAVEL TIME BY PT,678,154,78,44,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,225,INITIAL SUBJECTIVE TRAVEL TIME BY CAR,678,444,78,44,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,226,INITIAL SUBJECTIVE TRAVEL TIME BY BIKE,678,644,78,44,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,227,226,208,1,0,0,0,0,192,1,-1--1--1,,1|(637,748)|
+1,228,225,207,1,0,0,0,0,192,1,-1--1--1,,1|(591,497)|
+1,229,224,206,1,0,0,0,0,192,1,-1--1--1,,1|(596,222)|
+10,230,subjective travel time by PT,88,201,61,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,231,subjective travel time by car,85,517,61,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,232,subjective travel time by bike,83,917,61,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,233,230,218,1,0,0,0,0,192,0,-1--1--1,,1|(201,257)|
+1,234,231,213,1,0,0,0,0,192,0,-1--1--1,,1|(205,548)|
+1,235,232,223,1,0,0,0,0,192,0,-1--1--1,,1|(228,899)|
+1,236,56,218,1,0,0,0,0,192,0,-1--1--1,,1|(207,457)|
+1,237,56,223,1,0,0,0,0,192,0,-1--1--1,,1|(266,768)|
+1,238,206,218,1,0,0,0,0,192,0,-1--1--1,,1|(418,193)|
+1,239,207,213,1,0,0,0,0,192,0,-1--1--1,,1|(422,471)|
+1,240,208,223,1,0,0,0,0,192,0,-1--1--1,,1|(417,788)|
+10,241,SUBJECTIVE WAITING AND CHANGING TIME,-88,290,76,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,242,PHYSICAL WAITING AND CHANGING TIME,-331,-46,76,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,243,110,230,1,0,0,0,0,192,0,-1--1--1,,1|(15,27)|
+1,244,241,230,1,0,0,0,0,192,0,-1--1--1,,1|(0,200)|
+10,245,in vehicle time by PT,-435,48,54,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,246,physical travel time by PT,-169,11,55,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,247,242,246,1,0,0,0,0,192,0,-1--1--1,,1|(-227,-38)|
+1,248,245,246,1,0,0,0,0,192,0,-1--1--1,,1|(-344,18)|
+1,249,36,230,1,0,0,0,0,192,0,-1--1--1,,1|(65,20)|
+1,250,245,230,1,0,0,0,0,192,0,-1--1--1,,1|(-123,75)|
+10,251,in vehicle time by car,-518,618,54,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,252,251,231,1,0,0,0,0,192,0,-1--1--1,,1|(-192,635)|
+1,253,94,231,1,0,0,0,0,192,0,-1--1--1,,1|(-55,509)|
+10,254,UNIT VECTOR MID AND LONG DISTANCE,-146,548,90,31,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,255,254,231,1,0,0,0,0,192,0,-1--1--1,,1|(7,562)|
+10,256,physical travel time by bike,-116,1195,55,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,257,186,256,1,0,0,0,0,192,0,-1--1--1,,1|(-254,1187)|
+1,258,85,256,1,0,0,0,0,192,0,-1--1--1,,1|(-182,1319)|
+1,259,99,256,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(-207,1132)|
+1,260,26,256,1,0,0,0,0,64,0,-1--1--1,,1|(-317,1156)|
+1,261,148,232,1,0,0,0,0,192,0,-1--1--1,,1|(285,971)|
+1,262,256,232,1,0,0,0,0,192,0,-1--1--1,,1|(32,1081)|
+10,263,AVERAGE EUCLIDIAN DISTANCE,-368,1273,51,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,264,263,256,1,0,0,0,0,192,0,-1--1--1,,1|(-261,1210)|
+1,265,73,251,1,0,0,0,0,192,0,-1--1--1,,1|(-587,700)|
+10,266,REFERENCE CAR NETWORK TO EUCLIDIAN DISTANCE RATIO,-163,870,128,29,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,267,PT NETWORK TO EUCLIDIAN DISTANCE RATIO,-544,-20,79,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,268,PT AVERAGE SPEED,-683,32,60,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,269,267,245,1,0,0,0,0,192,0,-1--1--1,,1|(-447,4)|
+1,270,268,245,1,0,0,0,0,192,0,-1--1--1,,1|(-590,22)|
+1,271,56,213,1,0,0,0,0,192,0,-1--1--1,,1|(315,617)|
+10,272,MAX STT,272,363,43,22,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,273,272,223,1,0,0,0,0,192,0,-1--1--1,,1|(252,576)|
+1,274,272,213,1,0,0,0,0,192,0,-1--1--1,,1|(297,455)|
+1,275,272,218,1,0,0,0,0,192,0,-1--1--1,,1|(304,329)|
+1,276,207,100,1,0,0,0,0,192,0,-1--1--1,,1|(839,484)|
+1,277,207,101,1,0,0,0,0,192,0,-1--1--1,,1|(839,539)|
+1,278,208,29,1,0,0,0,0,192,0,-1--1--1,,1|(806,798)|
+1,279,208,28,1,0,0,0,0,192,0,-1--1--1,,1|(781,868)|
+1,280,206,100,1,0,0,0,0,192,0,-1--1--1,,1|(828,448)|
+1,281,206,101,1,0,0,0,0,192,0,-1--1--1,,1|(848,502)|
+1,282,206,29,1,0,0,0,0,192,0,-1--1--1,,1|(835,620)|
+1,283,206,28,1,0,0,0,0,192,0,-1--1--1,,1|(810,663)|
+1,284,207,57,1,0,0,0,0,192,0,-1--1--1,,1|(656,391)|
+1,285,206,57,1,0,0,0,0,192,0,-1--1--1,,1|(646,173)|
+1,286,207,58,1,0,0,0,0,192,0,-1--1--1,,1|(794,266)|
+1,287,206,58,1,0,0,0,0,192,0,-1--1--1,,1|(734,170)|
+1,288,181,251,1,0,0,0,0,192,0,-1--1--1,,1|(-413,658)|
+1,289,266,181,1,0,0,0,0,192,0,-1--1--1,,1|(-228,784)|
+10,290,CAR NETWORK DISTANCE SENSITIVITY,-383,912,110,23,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,||B|0-166-214,0,0,0,0,0,0
+1,291,290,181,1,0,0,0,0,192,0,-1--1--1,,1|(-311,819)|
+10,292,AVERAGE EUCLIDIAN DISTANCE,-340,219,53,33,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,293,292,245,1,0,0,0,0,192,0,-1--1--1,,1|(-438,153)|
+10,294,MINUTES PER HOUR,-485,168,54,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,295,294,245,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(-494,111)|
+10,296,AVERAGE EUCLIDIAN DISTANCE,-490,524,53,33,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,297,MINUTES PER HOUR,-615,523,54,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,298,296,251,1,0,0,0,0,192,0,-1--1--1,,1|(-520,555)|
+1,299,297,251,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(-586,564)|
+10,300,PEAK TIME WINDOW,430,-546,51,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,301,300,32,1,0,0,0,0,192,0,-1--1--1,,1|(398,-488)|
+10,302,SHARE OF TRIPS OCCURRING IN PEAK TIME,541,-494,76,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,303,302,32,1,0,0,0,0,192,0,-1--1--1,,1|(464,-460)|
+1,304,50,43,1,0,0,0,0,192,0,-1--1--1,,1|(1424,38)|
+1,305,3,43,1,0,0,0,0,192,0,-1--1--1,,1|(1397,-52)|
+10,306,daily car trips,437,1790,52,22,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,307,51,306,1,0,0,0,0,64,0,-1--1--1,,1|(1307,1232)|
+1,308,7,306,1,0,0,0,0,64,0,-1--1--1,,1|(1295,1365)|
+1,309,306,74,1,0,0,0,0,192,0,-1--1--1,,1|(-535,1612)|
+12,310,0,-653,986,200,21,8,7,0,58,-1,1,0,0,0-0-0,0-0-0,Arial|18|BU|0-0-0,0,0,256,0,0,0
+Cycling physical time
+12,311,0,-553,1037,301,36,8,7,0,42,-1,1,0,0,0-0-0,0-0-0,Arial|14||0-0-0,0,0,256,0,0,0
+Physical travel time by bike increases with the connectivity of the network (which decreases the network to euclidian distance ratio) and with the uptake of e-bikes (which increases average speed)
+12,312,0,810,1119,200,21,8,7,0,58,-1,1,0,0,0-0-0,0-0-0,Arial|18|BU|0-0-0,0,0,256,0,0,0
+Cycling subjective time
+12,313,0,822,1165,208,31,8,7,0,42,-1,1,0,0,0-0-0,0-0-0,Arial|14||0-0-0,0,0,256,0,0,0
+Subjective travel time by bike increase with the completion of the network, the presence of car lanes and the presence of car parking, 
+12,314,0,-1341,522,200,21,8,7,0,58,-1,1,0,0,0-0-0,0-0-0,Arial|18|BU|0-0-0,0,0,256,0,0,0
+Car physical time
+12,315,0,-1112,602,430,57,8,7,0,42,-1,1,0,0,0-0-0,0-0-0,Arial|14||0-0-0,0,0,256,0,0,0
+Physical time on car trips increases when the network becomes less accessible (network to euclidian distance ratio increases) and when congested speed decreases. Congested spead decreases when peak network density (cars per km of car lane during peak hour) approaches collision density (max cars per km of car lane). The bathtub model of congestion is applied to derive congested speed from these density values. Congested speed takes a range between walking speed (3 km/h and the speed limit in the city (30 km/h).
+12,316,0,-1122,148,200,21,8,7,0,58,-1,1,0,0,0-0-0,0-0-0,Arial|18|BU|0-0-0,0,0,256,0,0,0
+Car subjective time
+12,317,0,-1048,198,275,35,8,7,0,42,-1,1,0,0,0-0-0,0-0-0,Arial|14||0-0-0,0,0,256,0,0,0
+Subjective travel time by car increases non-linearly with parking search and egress time increasing. The number parking spots in the city per daily car trip is used as a proxy for parking availability.
+12,318,0,-1267,-540,200,21,8,7,0,58,-1,1,0,0,0-0-0,0-0-0,Arial|18|BU|0-0-0,0,0,256,0,0,0
+Public transport subjective time
+12,319,0,-1130,-467,338,58,8,7,0,42,-1,1,0,0,0-0-0,0-0-0,Arial|14||0-0-0,0,0,256,0,0,0
+Public transport subjective travel time increases with overcrowding and with walking attractiveness. Overcrowding increases via an overcrowding multiplier, that goes above 1 when ridership during peak hours goes above the seat capacity, and 2 when seat and standing capacity are both reached (as in Pfaffenbichler (2010)). Walking attractiveness is proxied with available pedestrian space (average sidewalk width).
+12,320,0,410,-25,200,21,8,7,0,58,-1,1,0,0,0-0-0,0-0-0,Arial|18|BU|0-0-0,0,0,256,0,0,0
+Mode choice
+12,321,0,658,49,447,61,8,7,0,42,-1,1,0,0,0-0-0,0-0-0,Arial|14||0-0-0,0,0,256,0,0,0
+Mode choice occurs on long distances between public transport and cars, and on mid distances between public transport and bikes. All short distance trips are assumed to be done by foot, meaning no choice model is applied to the short trip distance band. The applied model is entropy maximization, where the beta parameter determines the degree of dispersion of mode choice (i.e. how strongly mode choice varies due to gaps in subjective travel time). Access to transport modes precedes mode choice and determines the size of population groups considering each set of options.
+10,322,PEAK TIME WINDOW,-1497,933,56,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,323,SHARE OF TRIPS OCCURRING IN PEAK TIME,-1392,1037,82,33,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,324,323,74,1,0,0,0,0,192,0,-1--1--1,,1|(-1384,951)|
+1,325,322,74,1,0,0,0,0,192,0,-1--1--1,,1|(-1438,866)|
+10,326,Cars,-1528,294,30,12,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,327,EBIKE GENTLE UPTAKE LOOKUP,-242,1557,75,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,328,EBIKE STEEP UPTAKE LOOKUP,-242,1557,75,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,329,EBIKE UPTAKE SWITCH,-242,1557,66,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,330,Time,-242,1557,29,10,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,331,YEAR,-242,1557,32,10,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,332,SENSITIVITY TO CAR LANE DATA UNCERTAINTY,281,1133,103,31,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,||B|0-166-214,0,0,0,0,0,0
+1,333,332,20,1,0,0,0,0,192,0,-1--1--1,,1|(452,1171)|
+10,334,empty city parking spots per daily car trip,-1421,452,71,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,335,326,334,1,0,0,0,0,192,0,-1--1--1,,1|(-1506,366)|
+1,336,188,334,1,0,0,0,0,192,0,-1--1--1,,1|(-1551,402)|
+1,337,306,334,1,0,0,0,0,192,0,-1--1--1,,1|(-871,1393)|
+1,338,334,120,1,0,0,0,0,192,0,-1--1--1,,1|(-1232,444)|
+10,339,physical travel time by car,-334,538,55,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,340,251,339,1,0,0,0,0,192,0,-1--1--1,,1|(-459,580)|
+1,341,69,339,1,0,0,0,0,192,0,-1--1--1,,1|(-536,461)|
+1,342,254,339,1,0,0,0,0,192,0,-1--1--1,,1|(-242,510)|
+10,343,gentle,-879,1575,32,10,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,344,343,146,1,0,0,0,0,64,0,-1--1--1,,1|(-950,1545)|
+10,345,EBIKE GENTLE UPTAKE LOOKUP,-1235,1575,101,24,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,|||0-128-0,0,0,0,0,0,0
+10,346,Time,-957,1604,32,12,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+10,347,EBIKE STEEP UPTAKE LOOKUP,-1242,1512,83,18,8,3,0,2,-1,0,0,0,0-0-0,0-0-0,|||0-128-0,0,0,0,0,0,0
+10,348,EBIKE UPTAKE SWITCH,-1191,1450,67,23,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,||B|0-166-214,0,0,0,0,0,0
+10,349,YEAR,-1040,1613,42,22,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,350,0,-1274,1297,200,21,8,7,0,58,-1,1,0,0,0-0-0,0-0-0,Arial|18|BU|0-0-0,0,0,256,0,0,0
+E-bike uptake
+12,351,0,-1211,1358,263,44,8,7,0,42,-1,1,0,0,0-0-0,0-0-0,Arial|14||0-0-0,0,0,256,0,0,0
+E-bike uptake is exogenous. The speed of e-bike uptake and final level achieved is uncertain. The model compares two scenarios, one with gentle uptake and one with steep uptake of e-bikes
+1,352,346,146,1,0,0,0,0,192,0,-1--1--1,,1|(-991,1560)|
+1,353,349,146,1,0,0,0,0,192,0,-1--1--1,,1|(-1048,1564)|
+1,354,348,146,1,0,0,0,0,192,0,-1--1--1,,1|(-1069,1441)|
+1,355,347,146,1,0,0,0,0,192,0,-1--1--1,,1|(-1103,1513)|
+1,356,345,146,1,0,0,0,0,192,0,-1--1--1,,1|(-1106,1543)|
+10,357,TRIP PER MINUTE,-417,414,43,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,358,357,94,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(-334,419)|
+10,359,TRIP PER MINUTE,-137,-203,48,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,360,359,110,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(-144,-152)|
+10,361,SPOT PER CAR,-1433,349,46,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,362,361,334,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(-1401,394)|
+10,363,TRIP PER MINUTE,1183,485,48,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,364,363,58,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(1138,298)|
+1,365,363,57,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(1122,390)|
+1,366,363,100,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(1124,468)|
+1,367,363,101,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(1095,498)|
+1,368,363,29,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(1138,569)|
+1,369,363,28,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(1091,722)|
+10,370,UNIT VECTOR MID DISTANCE,2089,551,73,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,371,370,12,1,0,0,0,0,192,0,-1--1--1,,1|(1961,553)|
+10,372,UNIT VECTOR MID DISTANCE,-222,1279,73,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,373,372,256,1,0,0,0,0,192,0,-1--1--1,,1|(-202,1240)|
+10,374,UNIT VECTOR MID AND LONG DISTANCE,-137,165,70,33,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,375,374,230,1,0,0,0,0,192,0,-1--1--1,,1|(-12,153)|
+10,376,car distance share,1733,104,46,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,377,PT distance share,1867,104,46,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,378,bike distance share,1996,104,50,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,379,walking distance share,2133,104,54,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,380,0,1952,98,287,42,3,7,0,43,5,1,0,0,0-166-214,0-0-0,Arial|10||0-0-0,0,0,256,0,0,0
+Modal split - distance traveled
+10,381,daily car distance,1643,-68,36,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,382,381,376,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,383,daily PT distance,1777,-68,36,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,384,383,377,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,385,daily cycling distance,1906,-68,49,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,386,385,378,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,387,daily walking distance,2043,-68,52,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,388,387,379,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,389,total daily distance travelled,1643,-68,69,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,390,389,376,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,391,total daily distance travelled,1777,-68,69,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,392,391,377,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,393,total daily distance travelled,1906,-68,69,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,394,393,378,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,395,total daily distance travelled,2043,-68,69,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,396,395,379,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Destination choice
+$-1--1--1,0,|12||-1--1--1|-1--1--1|-1--1--1|-1--1--1|-1--1--1|96,96,86,0
+10,1,Daily trips per city population within city,547,1002,70,33,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,2,Daily trips per city population to ring,547,849,65,33,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,3,Daily trips per ring population to city,547,696,65,33,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,4,Daily trips per ring population within ring,547,543,65,33,3,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,5,7,3,100,0,0,22,0,192,0,-1--1--1,,1|(547,644)|
+1,6,7,4,4,0,0,22,0,192,0,-1--1--1,,1|(547,594)|
+11,7,0,547,619,8,6,33,3,0,0,2,0,0,0,0,0,0,0,0,0
+10,8,net increase in self containment ring,469,619,70,23,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,9,11,2,100,0,0,22,0,192,0,-1--1--1,,1|(547,900)|
+1,10,11,1,4,0,0,22,0,192,0,-1--1--1,,1|(547,950)|
+11,11,0,547,925,8,6,33,3,0,0,2,0,0,0,0,0,0,0,0,0
+10,12,net increase in self containment city,469,925,70,23,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,13,INITIAL DAILY TRIPS PER CITY POPULATION WITHIN CITY,301,919,92,43,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,14,INITIAL DAILY TRIPS PER CITY POPULATION TO RING,313,790,83,44,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,15,INITIAL DAILY TRIPS PER RING POPULATION TO CITY,313,637,88,43,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,16,INITIAL DAILY TRIPS PER RING POPULATION WITHIN RING,313,477,86,40,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,17,13,1,1,0,0,0,0,192,1,-1--1--1,,1|(416,1010)|
+1,18,14,2,1,0,0,0,0,192,1,-1--1--1,,1|(425,852)|
+1,19,15,3,1,0,0,0,0,192,1,-1--1--1,,1|(421,701)|
+1,20,16,4,1,0,0,0,0,192,1,-1--1--1,,1|(417,547)|
+12,21,48,815,1002,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,22,24,1,100,0,0,22,0,192,0,-1--1--1,,1|(656,1002)|
+1,23,24,21,4,0,0,22,0,192,0,-1--1--1,,1|(748,1002)|
+11,24,0,701,1002,6,8,34,3,0,0,3,0,0,0,0,0,0,0,0,0
+10,25,net increase in proximity of destinations,701,961,68,33,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,26,24,1,4,0,0,22,0,192,0,-1--1--1,,2|(701,1129)|(547,1129)|
+10,27,DESTINATION SHIFT RATE CITY,780,851,64,33,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,||B|0-166-214,0,0,0,0,0,0
+10,28,DESTINATION SHIFT RATE RING,780,531,69,32,8,3,0,18,-1,0,0,0,0-0-0,0-0-0,||B|0-166-214,0,0,0,0,0,0
+1,29,3,8,1,0,0,0,0,192,0,-1--1--1,,1|(453,688)|
+1,30,2,12,1,0,0,0,0,192,0,-1--1--1,,1|(442,877)|
+1,31,1,25,1,0,0,0,0,192,0,-1--1--1,,1|(595,925)|
+1,32,27,25,1,0,0,0,0,192,0,-1--1--1,,1|(745,911)|
+1,33,27,12,1,0,0,0,0,192,0,-1--1--1,,1|(651,894)|
+1,34,28,8,1,0,0,0,0,192,0,-1--1--1,,1|(671,593)|
+10,35,UNIT VECTOR DESTINATION CHANGE,437,1151,65,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,36,35,1,1,0,0,0,0,192,0,-1--1--1,,1|(427,1086)|
+10,37,population fraction with car access on long distance trips,1336,627,74,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,38,2,37,1,0,0,0,0,192,0,-1--1--1,,1|(930,662)|
+1,39,3,37,1,0,0,0,0,192,0,-1--1--1,,1|(972,574)|
+10,40,Population,1099,719,53,12,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,41,40,37,1,0,0,0,0,192,0,-1--1--1,,1|(1194,677)|
+10,42,daily trips in each trip distance band,1338,834,68,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,43,UNIT VECTOR LONG DISTANCE,1118,810,86,17,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,44,1,42,1,0,0,0,0,192,0,-1--1--1,,1|(1192,968)|
+1,45,43,42,1,0,0,0,1,192,0,192-192-192,|||0-0-0,1|(1168,844)|
+10,46,daily long trips,959,827,57,22,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,47,3,46,1,0,0,0,0,192,0,-1--1--1,,1|(741,725)|
+1,48,2,46,1,0,0,0,0,192,0,-1--1--1,,1|(685,803)|
+1,49,40,46,1,0,0,0,0,192,0,-1--1--1,,1|(1046,749)|
+1,50,46,42,1,0,0,0,0,192,0,-1--1--1,,1|(1109,899)|
+1,51,40,42,1,0,0,0,0,192,0,-1--1--1,,1|(1232,751)|
+10,52,total daily trips,1236,1023,57,22,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,53,42,52,1,0,0,0,0,192,0,-1--1--1,,1|(1308,931)|
+12,54,0,365,242,200,21,8,7,0,58,-1,1,0,0,0-0-0,0-0-0,Arial|18|BU|0-0-0,0,0,256,0,0,0
+Shift in destination choice
+12,55,0,876,336,711,77,8,7,0,42,-1,1,0,0,0-0-0,0-0-0,Arial|14||0-0-0,0,0,256,0,0,0
+Shift in destination choice is an uncertainty related to future policy.|<<NnN>>|- We know that destination choice will change due to increasing attractiveness of active modes. Increasing attractiveness of cycling and walking will cause a shift from mid - long distance trips towards short - mid distance trips. |<<NnN>>|- We also know that mixed land use plans will increase proximity of destinations overall, and the construction of a tangential public transport line will increase the self-contention of the first ring, leading to less long distance trips from the ring to the city. |<<NnN>>||<<NnN>>|The effect of land use policy falls outside the mode scope, and the model is not disaggregate enough to endogenize destination choice in a valid manner. Therefore, shifting destination choice is treated as an exogenous uncertainty. We do assume proximity and self-containment will increase, but vary the rate at which this occurs.
+10,56,RELATIVE TIME GAIN DESTINATION SHIFT LONG TO MID,287,1147,109,37,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,57,RELATIVE TIME GAIN DESTINATION SHIFT MID TO SHORT,93,1143,97,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+11,58,0,389,1001,6,8,2,3,0,0,1,0,0,0,0,0,0,0,0,0
+12,59,48,302,1003,25,15,0,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,60,62,59,100,0,0,22,0,192,0,-1--1--1,,1|(362,1003)|
+1,61,62,1,4,0,0,22,0,192,0,-1--1--1,,1|(443,1003)|
+11,62,0,404,1003,6,8,34,3,0,0,1,0,0,0,0,0,0,0,0,0
+10,63,net increase in trip frequency,404,1034,56,23,40,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,64,57,63,1,0,0,0,0,192,0,-1--1--1,,1|(175,1062)|
+1,65,56,63,1,0,0,0,0,192,0,-1--1--1,,1|(306,1100)|
+1,66,12,63,1,0,0,0,0,192,0,-1--1--1,,1|(402,962)|
+1,67,25,63,1,0,0,0,0,192,0,-1--1--1,,1|(385,952)|
+10,68,UNIT VECTOR MID DISTANCE,594,1197,68,33,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+1,69,68,1,1,0,0,0,0,192,0,-1--1--1,,1|(542,1149)|
+10,70,car distance share,1584,571,46,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,71,PT distance share,1718,571,46,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,72,bike distance share,1847,571,50,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+10,73,walking distance share,1984,571,54,23,8,3,0,0,-1,0,0,0,0,0,0,0,0,0
+12,74,0,1803,565,287,42,3,7,0,43,5,1,0,0,0-166-214,0-0-0,Arial|10||0-0-0,0,0,256,0,0,0
+Modal split - distance traveled
+10,75,daily car distance,1584,612,36,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,76,75,70,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,77,total daily distance travelled,1584,612,69,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,78,77,70,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,79,daily PT distance,1718,612,36,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,80,79,71,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,81,total daily distance travelled,1718,612,69,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,82,81,71,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,83,daily cycling distance,1847,612,49,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,84,83,72,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,85,total daily distance travelled,1847,612,69,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,86,85,72,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,87,daily walking distance,1984,612,52,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,88,87,73,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+10,89,total daily distance travelled,1984,612,69,18,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|||128-128-128,0,0,0,0,0,0
+1,90,89,73,0,1,0,0,0,64,0,-1--1--1,,1|(0,0)|
+///---\\\
+:GRAPH long_modal_split
+:TITLE Modal split long distance trips
+:STACK-FILL 0
+:SCALE
+:VAR long trip car share
+:DATASET 
+:LINE-COLOR 255-0-0
+:LINE-WIDTH 1
+:VAR long trip PT share
+:DATASET 
+:LINE-COLOR 255-128-0
+:LINE-WIDTH 1
+
+:GRAPH mid_modal_split
+:TITLE Modal split mid distance trips
+:STACK-FILL 0
+:SCALE
+:VAR mid trip bike share
+:DATASET 
+:LINE-COLOR 0-128-0
+:LINE-WIDTH 1
+:VAR mid trip PT share
+:DATASET 
+:LINE-COLOR 255-128-0
+:LINE-WIDTH 1
+:VAR MID TRIP CAR SHARE
+:DATASET 
+:LINE-COLOR 255-0-0
+:LINE-WIDTH 1
+
+:GRAPH modal_split_trips
+:TITLE Modal split all trips (trips)
+:STACK-FILL 0
+:SCALE
+:VAR daily car trips
+:DATASET 
+:LINE-COLOR 255-0-0
+:LINE-WIDTH 1
+:VAR daily PT trips
+:DATASET 
+:LINE-COLOR 255-128-0
+:LINE-WIDTH 1
+:VAR daily mid distance cycling trips
+:DATASET 
+:LINE-COLOR 0-128-0
+:LINE-WIDTH 1
+:VAR daily short distance walking trips
+:DATASET 
+:LINE-COLOR 0-128-128
+:LINE-WIDTH 1
+
+:GRAPH modal_split_distance
+:TITLE Daily distance travelled per mode
+:SCALE
+:VAR daily car distance per person
+:DATASET 
+:LINE-COLOR 255-0-0
+:LINE-WIDTH 1
+:VAR daily PT distance per person
+:DATASET 
+:LINE-COLOR 255-128-0
+:LINE-WIDTH 1
+:VAR daily bike distance per person
+:DATASET 
+:LINE-COLOR 0-128-0
+:LINE-WIDTH 1
+:VAR daily walking distance per person
+:DATASET 
+:LINE-COLOR 0-128-128
+:LINE-WIDTH 1
+
+:GRAPH space_distribution
+:TITLE Public space distribution and length of road network
+:STACK 0
+:SCALE
+:VAR Public space[space]
+:DATASET 
+:LINE-WIDTH 1
+:SCALE
+:VAR Total length of network
+:DATASET 
+:LINE-STYLE DASH
+:LINE-WIDTH 1
+
+:GRAPH modal_split_trips_share
+:TITLE Modal split all trips (trips share)
+:STACK-FILL 0
+:SCALE
+:VAR total car share
+:DATASET 
+:LINE-COLOR 255-0-0
+:LINE-WIDTH 1
+:VAR total PT share
+:DATASET 
+:LINE-COLOR 255-128-0
+:LINE-WIDTH 1
+:VAR total cycling share
+:DATASET 
+:LINE-COLOR 0-128-0
+:LINE-WIDTH 1
+:VAR total walking share
+:DATASET 
+:LINE-COLOR 0-128-128
+:LINE-WIDTH 1
+:L<%^E!@
+1:baseline.vdfx
+4:Time
+5:Cars[zone]
+6:adult car
+6:adult no car
+6:car parking
+6:city
+6:cyclists
+6:long
+6:mid
+6:motor traffic
+6:pedestrians
+6:private
+6:ring
+6:sharing
+6:short
+6:young adult
+9:baseline
+19:77,4
+24:2020
+25:2050
+26:2050
+18:experiments.vsc
+20:savelist.lst
+15:0,0,0,0,0,0
+27:0,
+34:0,
+42:0
+72:0
+73:0
+95:0
+96:0
+97:0
+77:0
+78:0
+102:0
+93:0
+94:0
+92:0
+91:0
+90:0
+87:0
+75:
+43:
+103:8,8,8,3,8
+105:0,0,0,0,0,0,0,0,0,0
+104:Times New Roman|12||0-0-0|0-0-0|-1--1--1|0-0-255|192-192-192|-1--1--1
