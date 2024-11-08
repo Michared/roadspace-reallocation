@@ -35,10 +35,10 @@ This directory contains the model file itself, the files that estimate the initi
 <b>3_Experiments</b> <br>
 This directory contains the notebooks that run the experiments for scenario discovery, and the notebooks that cluster, visualize, and analyze the results from the experiments by applying PRIM. It also contains the image files for the plots. It does not contain the experiment results in data format  (results.tar.gz) given this file was too large to upload to GitHub. Contents:
 <ul>
-  <li>results - directory containing the image files for the plots with experiment results</li>
-  <li>run_experiments.ipynb - notebook that runs the experiments while varying uncertain parameters (n=1000) and exports the results to a file named results.tar.gz</li>
-  <li>PRIM_main_outcomes.ipynb - notebook that clusters, visualizes and analyzes the main outcomes from the experiments (the reference mode, results included in the main text of the report)</li>
-  <li>PRIM_other_outcomes.ipynb - notebook that clusters and visualizes the other outcomes from the experiments (most of these results are included in the appendix rather than in the main text of the report)</li>
+  <li><b>results</b> - directory containing the image files for the plots with experiment results</li>
+  <li><b>run_experiments.ipynb</b> - notebook that runs the experiments while varying uncertain parameters (n=1000) and exports the results to a file named results.tar.gz</li>
+  <li><b>PRIM_main_outcomes.ipynb</b> - notebook that clusters, visualizes and analyzes the main outcomes from the experiments (the reference mode, results included in the main text of the report)</li>
+  <li><b>PRIM_other_outcomes.ipynb</b> - notebook that clusters and visualizes the other outcomes from the experiments (most of these results are included in the appendix rather than in the main text of the report)</li>
 </ul><br>
 
 <b>4_Miscellaneous</b> <br>
