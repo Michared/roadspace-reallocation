@@ -9,7 +9,7 @@ This directory contains the geospatial analysis and the other data analyses appl
   <li><b>jobs.ipynb</b> - noteboook processing job location data</li>
   <li><b>paris-roadspace.ipynb</b> - notebook processing overall public space distribution data</li>
   <li><b>pedestrian-space.ipynb</b> - notebook estimating pdestrian space </li>
-  <li><b>paris-roadspace.ipynb</b> - notebook estimating total public space</li>
+  <li><b>total-roadspace.ipynb</b> - notebook estimating total public space</li>
 </ul> <br>
 
 <b>2_ModelAndParameters</b> <br>
